@@ -1,38 +1,34 @@
 const Category = require('../models/Category');
 const Task = require('../models/Task');
 
-// ดึง Category ทั้งหมดของ Dashboard นั้นๆ
+// ดึง Category ทั้งหมดของ Project นั้นๆ
 exports.getCategories = async (req, res) => {
   try {
-    const { dashboardId } = req.params;
+    const { projectId } = req.params;
     // ต้องมี .sort({ order: 1 }) เพื่อเรียงจากน้อยไปมาก
-    const categories = await Category.find({ dashboardId }).sort({ order: 1 }); 
+    const categories = await Category.find({ projectId }).sort({ order: 1 }); 
     res.json(categories);
-  } catch (err) {
-    res.status(500).json({ message: 'Server Error' });
-  }
+  } catch (err) { res.status(500).json({ message: 'Server Error' }); }
 };
 
 // สร้าง Category ใหม่
 exports.createCategory = async (req, res) => {
   try {
-    const { name, dashboardId } = req.body;
+    const { name, projectId } = req.body;
     
     // หา order ตัวสุดท้ายเพื่อจะเอามา +1 (ให้มันไปต่อท้ายสุด)
-    const lastCategory = await Category.findOne({ dashboardId }).sort({ order: -1 });
+    const lastCategory = await Category.findOne({ projectId }).sort({ order: -1 }); 
     const newOrder = lastCategory ? lastCategory.order + 1 : 0;
 
     const newCategory = new Category({
       name,
-      dashboardId,
+      projectId, // บันทึกเป็น projectId
       order: newOrder
     });
 
     await newCategory.save();
     res.json(newCategory);
-  } catch (err) {
-    res.status(500).json({ message: 'Server Error' });
-  }
+  } catch (err) { res.status(500).json({ message: 'Server Error' }); }
 };
 
 exports.reorderCategories = async (req, res) => {

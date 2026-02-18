@@ -1,0 +1,27 @@
+{
+  "name": "siamese-kanban",
+  "version": "0.1.0",
+  "description": "Kanban Project Management Tool",
+  "scripts": {
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Punyaput/SimpleKanban.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Punyaput/SimpleKanban/issues"
+  },
+  "homepage": "https://github.com/Punyaput/SimpleKanban#readme"
+}

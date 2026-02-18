@@ -12,11 +12,11 @@ app.use(express.json());
 
 // เรียกใช้ Route ที่เราเพิ่งสร้างใน ./routes/auth.js
 const authRoutes = require('./routes/auth');
-const dashboardRoutes = require('./routes/dashboards'); //Import
+const projectRoutes = require('./routes/projects');
 const categoryRoutes = require('./routes/categories');
 const taskRoutes = require('./routes/tasks');
 app.use('/api/auth', authRoutes);
-app.use('/api/dashboards', dashboardRoutes);
+app.use('/api/projects', projectRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/tasks', taskRoutes);
 

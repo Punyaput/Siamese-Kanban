@@ -3,8 +3,8 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const { getCategories, createCategory, deleteCategory, reorderCategories } = require('../controllers/categoryController');
 
-// GET /api/categories/:dashboardId (ดึงหมวดหมู่ทั้งหมดของบอร์ดนั้น)
-router.get('/:dashboardId', authMiddleware, getCategories);
+// GET /api/categories/:projectId (ดึงหมวดหมู่ทั้งหมดของบอร์ดนั้น)
+router.get('/:projectId', authMiddleware, getCategories);
 
 // POST /api/categories (สร้างหมวดหมู่ใหม่)
 router.post('/', authMiddleware, createCategory);

@@ -127,3 +127,29 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password'); // ไม่เอา password
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { firstName, lastName, email, profileImage } = req.body;
+    
+    // อัปเดตข้อมูล
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { firstName, lastName, email, profileImage },
+      { new: true } // ส่งค่าใหม่กลับไป
+    ).select('-password');
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};

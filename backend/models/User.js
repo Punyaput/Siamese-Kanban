@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true,
     unique: true // ห้ามใช้อีเมลซ้ำ
+  },
+  profileImage: { 
+    type: String, 
+    default: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541' 
   }
 }, { timestamps: true }); // timestamps จะช่วยสร้างฟิลด์ createdAt และ updatedAt ให้อัตโนมัติ
 

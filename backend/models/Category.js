@@ -6,9 +6,9 @@ const categorySchema = new mongoose.Schema({
     required: true,
     default: 'New Category'
   },
-  dashboardId: { 
+  projectId: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Dashboard', // ระบุว่า Category นี้อยู่บนบอร์ดไหน
+    ref: 'Project',
     required: true 
   },
   order: { // สำหรับจัดเรียงลำดับ Category ซ้ายไปขวา

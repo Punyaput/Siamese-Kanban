@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
-const { getTasks, createTask, updateTask, deleteTask } = require('../controllers/taskController');
+const { getTasks, createTask, updateTask, deleteTask, moveTask } = require('../controllers/taskController');
 
 // บังคับผ่าน Auth ทุกเส้น
 router.use(authMiddleware);
@@ -17,5 +17,7 @@ router.put('/:id', updateTask);
 
 // DELETE /api/tasks/:id (ลบการ์ด)
 router.delete('/:id', deleteTask);
+
+router.put('/move/:id', authMiddleware, moveTask);
 
 module.exports = router;

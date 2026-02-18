@@ -1,23 +1,28 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/common/Navbar';
-import Welcome from './pages/Welcome';
+import Welcome from './pages/Welcome'; // <--- 1. อย่าลืม Import บรรทัดนี้
 import Auth from './pages/Auth';
 import Workspace from './pages/Workspace';
-import Dashboard from './pages/Dashboard';
+import Project from './pages/Project';
+import Profile from './pages/Profile';
+import Navbar from './components/common/Navbar';
 
 function App() {
   return (
-    <BrowserRouter>
-      {/* Navbar วางไว้นอก Routes เพื่อให้แสดงอยู่ทุกหน้า */}
-      <Navbar />
-      
-      <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/workspace" element={<Workspace />} />
-        <Route path="/dashboard/:id" element={<Dashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="app-container">
+      <BrowserRouter>
+        <Navbar />
+        
+        <Routes>
+          {/* 2. เปลี่ยนหน้าแรก (Root) ให้เป็น Welcome */}
+          <Route path="/" element={<Welcome />} />
+          
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/workspace" element={<Workspace />} />
+          <Route path="/project/:id" element={<Project />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
