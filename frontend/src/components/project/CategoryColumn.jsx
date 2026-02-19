@@ -85,7 +85,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
           onClick={() => { if(window.confirm(`ลบ Catalog "${category.name}"?`)) onDeleteCategory(category._id); }} 
           style={styles.deleteColBtn}
         >
-          🗑️
+          ✖
         </button>
       </div>
 

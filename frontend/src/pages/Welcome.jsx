@@ -5,26 +5,21 @@ export default function Welcome() {
   const navigate = useNavigate();
 
   return (
-    // container: คือส่วนที่จะขยายเต็มจอและมีรูปพื้นหลัง
     <div style={styles.container}>
-      
-      {/* content: คือส่วนข้อความตรงกลาง (มีพื้นหลังดำจางๆ เพื่อให้อ่านออก) */}
       <div style={styles.content}>
-        
-        <h1 style={styles.title}>Siamese</h1>
-        
+        <h1 style={styles.title}>Siamese Kanban</h1>
         <p style={styles.description}>
           Manage your projects efficiently with our Kanban board. <br/>
           Simple, fast, and effective workflow for your team.
         </p>
-
         <button 
           style={styles.button} 
           onClick={() => navigate('/auth')}
+          onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+          onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
         >
           Let's Start
         </button>
-
       </div>
     </div>
   );
@@ -32,19 +27,12 @@ export default function Welcome() {
 
 const styles = {
   container: {
-    // --- ส่วนจัดการ Background เต็มจอ ---
-    height: 'calc(100vh - 60px)', // ความสูงเต็มจอ (ลบความสูง Navbar 60px ออก)
-    width: '100%',                 // ความกว้างเต็มจอ
-    
-    // ใส่ URL รูปภาพตรงนี้ครับ (ตอนนี้เป็นรูปตัวอย่างตึกสูง)
-    backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')",
-    
-    backgroundSize: 'cover',       // ขยายรูปให้เต็มพื้นที่เสมอ
-    backgroundPosition: 'center',  // จัดรูปให้อยู่ตรงกลาง
-    backgroundRepeat: 'no-repeat', // ไม่ให้รูปซ้ำ
-    // --------------------------------
-
-    // จัดให้ Content อยู่กึ่งกลางหน้าจอ
+    height: 'calc(100vh - 60px)', 
+    width: '100%',                 
+    backgroundImage: "url('https://i.ibb.co/1YXwPr5m/Warm-Tone-Working-Space.png')",
+    backgroundSize: 'cover',       
+    backgroundPosition: 'center',  
+    backgroundRepeat: 'no-repeat', 
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -56,43 +44,47 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    // กรอบข้อความตรงกลาง
     width: '100%',
     height: '100%',
     textAlign: 'center',
     color: 'white',
-    // สีดำจางๆ (Opacity 0.6) เฉพาะหลังข้อความเพื่อให้อ่านง่ายขึ้น
-    // backgroundColor: 'rgba(0, 0, 0, 0.6)', 
-    // padding: '40px 60px',
-    // borderRadius: '15px',
-    backdropFilter: 'blur(3px)', // เบลอพื้นหลังนิดๆ ให้ดูสวย
-    boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-    maxWidth: '100%', // ไม่ให้กว้างเกินไปบนจอมือถือ
+    backdropFilter: 'blur(3px)', 
+    backgroundColor: 'rgba(42, 36, 33, 0.4)', // เพิ่ม overlay สีน้ำตาลเข้มจางๆ ให้ตัวหนังสือเด่น
+    maxWidth: '100%', 
   },
   title: {
-    fontSize: '4rem',
-    fontWeight: 'bold',
+    fontSize: '5.5rem',
+    fontWeight: '800',
     marginBottom: '10px',
     marginTop: 0,
-    textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+    backgroundImage: 'linear-gradient(to right, #be9b79 0%, #F6E2B3 50%, #be9b79 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent', 
+    display: 'inline-block',
+    filter: 'drop-shadow(0px 4px 10px rgba(0,0,0,0.5))',
+    letterSpacing: '2px'
   },
   description: {
-    fontSize: '1.2rem',
+    fontSize: '1.4rem',
+    fontWeight: '400',
     lineHeight: '1.6',
     marginBottom: '0',
-    color: '#f0f0f0'
+    marginTop: '20px',
+    color: '#F0EBE1', // สีครีมอ่อนๆ
+    textShadow: '0 2px 4px rgba(0,0,0,0.8)'
   },
   button: {
-    marginTop: '40px', // เว้นระยะห่างด้านบนตามที่ขอ
-    padding: '15px 50px',
+    marginTop: '60px', 
+    padding: '16px 60px',
     fontSize: '1.2rem',
     fontWeight: 'bold',
-    borderRadius: '30px',
-    border: 'none',
-    backgroundColor: '#83684f',
-    color: 'white',
+    borderRadius: '50px',
+    border: '2px solid #be9b79',
+    backgroundColor: '#4D3D2E',
+    color: '#F6E2B3',
     cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(182, 125, 71, 0.42)',
+    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.4)',
     transition: 'all 0.3s ease',
+    letterSpacing: '1px'
   }
 };

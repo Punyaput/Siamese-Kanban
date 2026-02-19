@@ -47,48 +47,45 @@ export default function Auth() {
 
   return (
     <div style={styles.container}>
+      <div style={styles.backgroundLayer}></div>
       <div style={styles.card}>
         <h2 style={styles.title}>{isLogin ? 'Login' : 'Sign Up'}</h2>
         
         <form onSubmit={handleSubmit} style={styles.form}>
           
-          {/* --- ส่วน Register --- */}
           {!isLogin && (
             <>
               <div style={styles.row}>
-                {/* เพิ่ม flex: 1 ตรงนี้เพื่อให้แบ่งครึ่งเท่ากัน */}
                 <div style={{...styles.inputGroup, flex: 1}}>
-                  <label style={styles.label}>First Name:</label>
+                  <label style={styles.label}>First Name</label>
                   <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required style={styles.input} />
                 </div>
-                {/* เพิ่ม flex: 1 ตรงนี้เช่นกัน */}
                 <div style={{...styles.inputGroup, flex: 1}}>
-                  <label style={styles.label}>Last Name:</label>
+                  <label style={styles.label}>Last Name</label>
                   <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required style={styles.input} />
                 </div>
               </div>
               
               <div style={styles.inputGroup}>
-                <label style={styles.label}>Email:</label>
+                <label style={styles.label}>Email</label>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required style={styles.input} />
               </div>
             </>
           )}
 
-          {/* --- ส่วน Login & Register --- */}
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Username (ID):</label>
+            <label style={styles.label}>Username (ID)</label>
             <input type="text" name="user_id" value={formData.user_id} onChange={handleChange} required style={styles.input} />
           </div>
           
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Password:</label>
+            <label style={styles.label}>Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} required style={styles.input} />
           </div>
 
           {!isLogin && (
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Confirm Password:</label>
+              <label style={styles.label}>Confirm Password</label>
               <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required style={styles.input} />
             </div>
           )}
@@ -99,9 +96,9 @@ export default function Auth() {
         </form>
 
         <p style={styles.toggleText}>
-          {isLogin ? "don't have an account? " : "already have an account? "}
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
           <span onClick={() => setIsLogin(!isLogin)} style={styles.link}>
-            {isLogin ? 'register' : 'login'}
+            {isLogin ? 'Register' : 'Login'}
           </span>
         </p>
       </div>
@@ -110,82 +107,113 @@ export default function Auth() {
 }
 
 const styles = {
-  container: { 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    minHeight: '100vh', 
-    backgroundColor: '#9a9a9a' 
+  container: {
+    position: 'relative', 
+    height: 'calc(100vh - 60px)',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden', 
+    margin: 0,
+    padding: 0
+  },
+  backgroundLayer: {
+    position: 'absolute', 
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: "url('https://i.ibb.co/1YXwPr5m/Warm-Tone-Working-Space.png')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    filter: 'blur(8px) brightness(0.7)', // เพิ่มความมืดให้รูปหลังนิดหน่อย การ์ดจะได้เด่น
+    transform: 'scale(1.05)', 
+    zIndex: 0 
   },
   card: { 
-    backgroundColor: '#4a4a4a', 
-    padding: '40px', 
-    borderRadius: '15px', 
-    boxShadow: '0 10px 25px rgba(0,0,0,0.3)', // เพิ่มเงาให้ดูมีมิติ
-    width: '400px', 
-    maxWidth: '90%', // กันล้นจอโทรศัพท์
-    color: 'white' 
+    backgroundColor: 'rgba(30, 25, 22, 0.65)', // ปรับให้ติดโทนน้ำตาลเข้ม
+    backdropFilter: 'blur(16px)',          
+    WebkitBackdropFilter: 'blur(16px)',    
+    border: '1px solid rgba(190, 155, 121, 0.3)', // ขอบสีทองจางๆ
+    padding: '50px 40px', 
+    borderRadius: '24px', 
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)', 
+    width: '420px', 
+    maxWidth: '90%', 
+    color: 'white',
+    position: 'relative',
+    zIndex: 1 
   },
   title: { 
     textAlign: 'center', 
-    marginBottom: '30px', 
-    fontSize: '28px',
-    fontWeight: 'bold'
+    marginBottom: '35px', 
+    fontSize: '32px',
+    fontWeight: '800',
+    color: '#F6E2B3', // ตัวหนังสือสีทองอ่อน
+    letterSpacing: '1px'
   },
   form: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '15px' 
+    gap: '20px' 
   },
   row: { 
     display: 'flex', 
-    gap: '15px', // ระยะห่างระหว่าง First-Last Name
+    gap: '15px', 
     width: '100%' 
   },
   inputGroup: { 
     display: 'flex', 
     flexDirection: 'column', 
     textAlign: 'left',
-    width: '100%' // ให้ input group เต็มความกว้างของ parent
+    width: '100%' 
   },
   label: {
-    marginBottom: '5px',
-    fontSize: '14px',
-    color: '#ddd'
+    marginBottom: '8px',
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#d4b497', // สีทองทราย
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px'
   },
   input: { 
-    padding: '12px', 
-    borderRadius: '6px', 
-    border: 'none', 
-    backgroundColor: '#333', // สีพื้นหลัง Input เข้มๆ ตามรูป
+    padding: '14px', 
+    borderRadius: '10px', 
+    border: '1px solid rgba(190, 155, 121, 0.4)', 
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', 
     color: 'white', 
-    fontSize: '16px',
-    width: '100%', // สำคัญ: ให้เต็มพื้นที่
-    boxSizing: 'border-box', // สำคัญมาก: ป้องกัน Padding ดันจนล้น
-    outline: 'none'
+    fontSize: '15px',
+    width: '100%', 
+    boxSizing: 'border-box', 
+    outline: 'none',
+    transition: '0.3s'
   },
   button: { 
-    padding: '12px', 
-    borderRadius: '6px', 
+    padding: '16px', 
+    borderRadius: '10px', 
     border: 'none', 
-    backgroundColor: '#888', // สีปุ่มเทาๆ ตาม Theme
-    color: 'white', 
+    backgroundColor: '#be9b79', // ปุ่มสีทอง
+    color: '#2a2421', // ตัวอักษรสีเข้ม
     cursor: 'pointer', 
-    marginTop: '10px', 
+    marginTop: '15px', 
     fontSize: '16px',
     fontWeight: 'bold',
-    transition: '0.2s'
+    transition: '0.2s',
+    boxShadow: '0 4px 15px rgba(190, 155, 121, 0.3)'
   },
   toggleText: { 
-    marginTop: '20px', 
+    marginTop: '25px', 
     fontSize: '14px', 
     textAlign: 'center',
-    color: '#ccc'
+    color: '#a9a9a9'
   },
   link: { 
-    textDecoration: 'underline', 
+    textDecoration: 'none', 
     cursor: 'pointer', 
-    color: '#fff',
-    fontWeight: 'bold'
+    color: '#F6E2B3',
+    fontWeight: 'bold',
+    marginLeft: '5px'
   }
 };

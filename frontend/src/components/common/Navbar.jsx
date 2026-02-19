@@ -17,18 +17,17 @@ export default function Navbar() {
       <div 
         style={{
           ...styles.brand, 
-          // ถ้าเป็นหน้า Auth ให้เมาส์เป็นลูกศรปกติ (กดไม่ได้)
           cursor: isAuthPage ? 'default' : 'pointer' 
         }} 
         onClick={isAuthPage ? null : () => navigate('/workspace')}
       >
-        {/* --- เปลี่ยนจากวงกลมสีแดง เป็นรูป Logo --- */}
+        {/* --- โลโก้เดิมเป๊ะๆ ไม่มีการเปลี่ยนแปลง --- */}
         <img 
           src="https://image2url.com/r2/default/images/1771440606323-09353ab1-b699-4477-a77a-82435c4f938e.png" 
           alt="Siamese Logo" 
           style={styles.logoImage}
         />
-        <span style={{ marginLeft: '4px' }}>Siamese</span>
+        <span>Siamese</span>
       </div>
 
       {/* แสดงส่วนขวา (Profile) เฉพาะเมื่อ "ไม่ใช่" หน้า Auth */}
@@ -40,6 +39,8 @@ export default function Navbar() {
             style={styles.avatar}
             onClick={() => navigate('/profile')}
             title="Go to Profile"
+            onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+            onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
           />
         </div>
       )}
@@ -50,40 +51,46 @@ export default function Navbar() {
 const styles = {
   navbar: {
     height: '60px',
-    backgroundColor: 'white', // 1. พื้นหลังสีขาว
+    backgroundColor: 'rgba(255, 255, 255, 0.95)', // ขาวแบบโปร่งแสงนิดๆ
+    backdropFilter: 'blur(10px)', // เอฟเฟกต์กระจกเบาๆ
+    WebkitBackdropFilter: 'blur(10px)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 20px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.36)', // 2. เงาจางๆ ด้านล่าง
+    padding: '0 30px', // เพิ่มพื้นที่ว่างซ้ายขวาให้ดูไม่อึดอัด
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)', // ปรับเงาให้ฟุ้งและดูแพงขึ้น
+    borderBottom: '1px solid rgba(190, 155, 121, 0.2)', // ขอบล่างสีทองจางๆ คุมโทน
     position: 'sticky',
     top: 0,
     zIndex: 100
   },
   brand: {
-    color: '#4D3D2E', // 4. เปลี่ยนสีตัวอักษรเป็นสีเข้ม (เพราะพื้นขาว)
-    fontSize: '30px',
-    fontWeight: 'bold',
+    color: '#4D3D2E',
+    fontSize: '26px', // ปรับขนาดตัวหนังสือให้บาลานซ์กับ Navbar 60px
+    fontWeight: '800',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    letterSpacing: '0.5px'
   },
-  // Style ใหม่สำหรับรูปโลโก้
   logoImage: {
-    width: '50px', 
-    height: '50px',
-    objectFit: 'contain'
+    width: '45px', // ลดขนาดรูปลงนิดนึงไม่ให้ชนขอบบนล่าง
+    height: '45px',
+    objectFit: 'contain',
+    marginRight: '12px' // เพิ่มระยะห่างระหว่างโลโก้กับตัวหนังสือ
   },
   rightSection: {
     display: 'flex',
     alignItems: 'center'
   },
   avatar: {
-    width: '40px',
-    height: '40px',
+    width: '42px',
+    height: '42px',
     borderRadius: '50%',
     objectFit: 'cover',
     cursor: 'pointer',
-    border: '3px solid #4D3D2E', // ปรับขอบให้เป็นสีเทาอ่อนๆ แทนสีขาว
-    backgroundColor: '#eee'
+    border: '2px solid #be9b79', // ดึงสีทอง/ทรายจาก Theme มาใช้เป็นกรอบรูป
+    backgroundColor: '#f5f5f5',
+    transition: 'transform 0.2s ease', // เพิ่ม Animation ตอนเอาเมาส์ชี้
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
   }
 };

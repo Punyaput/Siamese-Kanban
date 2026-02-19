@@ -8,21 +8,18 @@ export default function Workspace() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Modal States
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [renameProjectId, setRenameProjectId] = useState(null);
   const [renameProjectName, setRenameProjectName] = useState('');
   
-  // Menu State
   const [activeMenuId, setActiveMenuId] = useState(null);
 
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Fetch Projects
   const fetchProjects = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/projects', {
@@ -39,7 +36,6 @@ export default function Workspace() {
     }
   };
 
-  // Create Project
   const handleCreateProject = async (e) => {
     e.preventDefault();
     if (!newProjectName) return;
@@ -54,7 +50,6 @@ export default function Workspace() {
     } catch (error) { alert('สร้าง Project ไม่สำเร็จ'); }
   };
 
-  // Delete Project
   const handleDeleteProject = async (projectId) => {
     if (!window.confirm('ยืนยันการลบโปรเจกต์? ข้อมูลข้างในจะหายทั้งหมด')) return;
     try {
@@ -65,7 +60,6 @@ export default function Workspace() {
     } catch (error) { alert('ลบไม่สำเร็จ'); }
   };
 
-  // Rename Project
   const openRenameModal = (project) => {
     setRenameProjectId(project._id);
     setRenameProjectName(project.name);
@@ -89,13 +83,12 @@ export default function Workspace() {
     if (!token) navigate('/auth');
     else fetchProjects();
     
-    // Close menu when clicking outside
     const handleClickOutside = () => setActiveMenuId(null);
     window.addEventListener('click', handleClickOutside);
     return () => window.removeEventListener('click', handleClickOutside);
   }, [token, navigate]);
 
-  if (loading) return <div style={{padding: '20px', color: 'white'}}>Loading...</div>;
+  if (loading) return <div style={{padding: '40px', color: '#be9b79', backgroundColor: '#2a2421', minHeight: '100vh'}}>Loading...</div>;
 
   return (
     <div style={styles.container}>
@@ -109,13 +102,13 @@ export default function Workspace() {
       </Modal>
 
       <div style={styles.content}>
-        <h2 style={styles.headerTitle}>Workspace ของ {user.firstName || user.user_id}</h2>
+        <h2 style={styles.headerTitle}>{user.firstName || user.user_id}'s Workspace</h2>
 
         <div style={styles.grid}>
           {/* New Project Card */}
           <div style={styles.newCard} onClick={() => setIsModalOpen(true)}>
-            <span style={{fontSize: '40px', marginBottom: '10px'}}>+</span>
-            <span>New Project</span>
+            <span style={styles.newCardIcon}>+</span>
+            <span style={styles.newCardText}>New Project</span>
           </div>
 
           {/* Project List */}
@@ -125,7 +118,6 @@ export default function Workspace() {
               style={styles.card}
               onClick={() => navigate(`/project/${project._id}`)}
             >
-              {/* Menu Trigger (3 Dots) */}
               <div 
                 style={styles.menuTrigger}
                 onClick={(e) => {
@@ -136,11 +128,10 @@ export default function Workspace() {
                 ⋮
               </div>
 
-              {/* Popup Menu */}
               {activeMenuId === project._id && (
                 <div style={styles.menuPopup} onClick={(e) => e.stopPropagation()}>
-                  <div style={styles.menuItem} onClick={() => openRenameModal(project)}>✏️ Rename</div>
-                  <div style={{...styles.menuItem, color: 'red'}} onClick={() => handleDeleteProject(project._id)}>🗑️ Delete</div>
+                  <div style={styles.menuItem} onClick={() => openRenameModal(project)}>Rename</div>
+                  <div style={{...styles.menuItem, color: '#e74c3c'}} onClick={() => handleDeleteProject(project._id)}>Delete</div>
                 </div>
               )}
 
@@ -155,20 +146,45 @@ export default function Workspace() {
 }
 
 const styles = {
-  container: { minHeight: '100vh', backgroundColor: '#9a9a9a', display: 'flex', flexDirection: 'column' },
-  content: { padding: '40px', flex: 1 },
-  headerTitle: { color: 'white', marginBottom: '30px' },
-  grid: { display: 'flex', flexWrap: 'wrap', gap: '20px' },
+  container: { minHeight: '100vh', backgroundColor: '#2a2421', display: 'flex', flexDirection: 'column' }, // เปลี่ยนสีพื้นหลัง
+  content: { padding: '50px', flex: 1 },
+  headerTitle: { color: '#F6E2B3', marginBottom: '40px', fontSize: '28px', fontWeight: 'bold', letterSpacing: '1px' },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '25px' }, // ใช้ Grid ให้การ์ดเรียงสวยงาม
   
-  newCard: { width: '220px', height: '150px', backgroundColor: '#ccc', borderRadius: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', color: '#333', fontWeight: 'bold', border: '2px dashed #666' },
+  newCard: { 
+    height: '160px', 
+    backgroundColor: 'rgba(190, 155, 121, 0.05)', 
+    borderRadius: '16px', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    cursor: 'pointer', 
+    border: '2px dashed rgba(190, 155, 121, 0.5)', 
+    transition: '0.3s'
+  },
+  newCardIcon: { fontSize: '40px', marginBottom: '5px', color: '#be9b79' },
+  newCardText: { color: '#be9b79', fontWeight: '600', fontSize: '16px' },
   
-  card: { width: '220px', height: '150px', backgroundColor: 'white', borderRadius: '10px', padding: '15px', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', position: 'relative' },
-  cardTitle: { fontWeight: 'bold', fontSize: '18px', color: '#333', marginTop: '15px' },
-  cardDate: { fontSize: '12px', color: '#888', alignSelf: 'flex-end' },
+  card: { 
+    height: '160px', 
+    backgroundColor: '#ffffff', 
+    borderRadius: '16px', 
+    padding: '25px', 
+    cursor: 'pointer', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    boxShadow: '0 8px 20px rgba(0,0,0,0.15)', 
+    position: 'relative',
+    transition: 'transform 0.2s ease, boxShadow 0.2s ease'
+  },
+  cardTitle: { fontWeight: '800', fontSize: '20px', color: '#2a2421', marginTop: '10px', wordBreak: 'break-word' },
+  cardDate: { fontSize: '13px', color: '#888', alignSelf: 'flex-start', fontWeight: '500' },
   
-  input: { width: '100%', padding: '10px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ddd' },
+  input: { width: '100%', padding: '12px', fontSize: '16px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none' },
   
-  menuTrigger: { position: 'absolute', top: '5px', right: '5px', fontSize: '24px', color: '#666', cursor: 'pointer', padding: '0 10px', zIndex: 10 },
-  menuPopup: { position: 'absolute', top: '35px', right: '10px', backgroundColor: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.2)', borderRadius: '5px', zIndex: 20, width: '120px', border: '1px solid #eee' },
-  menuItem: { padding: '10px', fontSize: '14px', cursor: 'pointer', borderBottom: '1px solid #f0f0f0', color: '#333' }
+  menuTrigger: { position: 'absolute', top: '15px', right: '15px', fontSize: '24px', color: '#999', cursor: 'pointer', padding: '0 5px', zIndex: 10, lineHeight: '1' },
+  menuPopup: { position: 'absolute', top: '45px', right: '20px', backgroundColor: 'white', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', borderRadius: '8px', zIndex: 20, width: '130px', border: '1px solid #eee', overflow: 'hidden' },
+  menuItem: { padding: '12px 15px', fontSize: '14px', cursor: 'pointer', borderBottom: '1px solid #f5f5f5', color: '#333', fontWeight: '500' }
 };

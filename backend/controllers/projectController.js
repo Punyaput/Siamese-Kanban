@@ -65,3 +65,16 @@ exports.deleteProject = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+exports.getProjectById = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+    
+    // ส่งข้อมูลโปรเจกต์กลับไป (เราจะเอา field .name ไปใช้)
+    res.json(project);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
