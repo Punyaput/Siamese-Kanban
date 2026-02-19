@@ -74,7 +74,7 @@ export default function Profile() {
 
       <div style={styles.contentWrapper}>
         <div style={styles.header}>
-           <h1 style={{margin: 0, color: '#333'}}>My Profile</h1>
+           <h2 style={styles.headerTitle}>My Profile</h2>
         </div>
         
         <div style={styles.cardsContainer}>
@@ -110,7 +110,7 @@ export default function Profile() {
               <h3 style={{margin: 0, color: '#666'}}>Personal Information</h3>
               {!isEditing && (
                 <button onClick={() => setIsEditing(true)} style={styles.editModeBtn}>
-                  ✏️ Edit
+                  edit
                 </button>
               )}
             </div>
@@ -171,7 +171,7 @@ export default function Profile() {
 }
 
 const styles = {
-  container: { minHeight: '100vh', backgroundColor: '#9a9a9a', fontFamily: 'Arial, sans-serif' },
+  container: { minHeight: '100vh', backgroundColor: '#3a3a3a', fontFamily: 'Arial, sans-serif' },
   contentWrapper: { padding: '40px', width: '100%', boxSizing: 'border-box' },
   header: { marginBottom: '20px' },
   
@@ -182,7 +182,7 @@ const styles = {
     flexWrap: 'wrap', 
     width: '100%' 
   },
-  
+  headerTitle: { color: 'white', marginBottom: '30px' },
   leftCard: { 
     backgroundColor: 'white', 
     borderRadius: '15px', 

@@ -109,7 +109,7 @@ export default function Workspace() {
       </Modal>
 
       <div style={styles.content}>
-        <h2 style={styles.headerTitle}>Workspace ของ {user.firstName || user.user_id}</h2>
+        <h2 style={styles.headerTitle}>{user.firstName || user.user_id}'s Workspace</h2>
 
         <div style={styles.grid}>
           {/* New Project Card */}
@@ -139,8 +139,8 @@ export default function Workspace() {
               {/* Popup Menu */}
               {activeMenuId === project._id && (
                 <div style={styles.menuPopup} onClick={(e) => e.stopPropagation()}>
-                  <div style={styles.menuItem} onClick={() => openRenameModal(project)}>✏️ Rename</div>
-                  <div style={{...styles.menuItem, color: 'red'}} onClick={() => handleDeleteProject(project._id)}>🗑️ Delete</div>
+                  <div style={styles.menuItem} onClick={() => openRenameModal(project)}>Rename</div>
+                  <div style={{...styles.menuItem, color: 'red'}} onClick={() => handleDeleteProject(project._id)}>Delete</div>
                 </div>
               )}
 
@@ -155,7 +155,7 @@ export default function Workspace() {
 }
 
 const styles = {
-  container: { minHeight: '100vh', backgroundColor: '#9a9a9a', display: 'flex', flexDirection: 'column' },
+  container: { minHeight: '100vh', backgroundColor: '#3a3a3a', display: 'flex', flexDirection: 'column' },
   content: { padding: '40px', flex: 1 },
   headerTitle: { color: 'white', marginBottom: '30px' },
   grid: { display: 'flex', flexWrap: 'wrap', gap: '20px' },

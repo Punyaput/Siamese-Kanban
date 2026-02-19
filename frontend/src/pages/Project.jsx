@@ -62,8 +62,23 @@ export default function Project() {
 
     // 1. Reorder Columns (เหมือนเดิม)
     if (type === 'COLUMN') {
-      // ... (โค้ดเดิม ไม่ต้องแก้)
-      return;
+      try {
+        // เรียก API ย้าย Category ที่เราเพิ่งสร้าง
+        await axios.put(`http://localhost:5000/api/categories/move/${draggableId}`, 
+          { 
+            newOrder: destination.index // ส่งตำแหน่งใหม่ไปให้ Backend จัดการ
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // โหลดข้อมูลโปรเจกต์ใหม่เพื่ออัปเดตหน้าจอ
+        setRefreshKey(prev => prev + 1); 
+        
+      } catch (err) {
+        console.error(err);
+        alert('ย้ายคอลัมน์ไม่สำเร็จ');
+      }
+      return; // ใส่ return ตรงนี้เพื่อจบการทำงาน ไม่ให้ไหลไปโดนโค้ดย้าย Task ข้างล่าง
     }
 
     // 2. Move Task (แก้ตรงนี้!)

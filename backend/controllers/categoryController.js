@@ -61,4 +61,42 @@ exports.deleteCategory = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+exports.moveCategory = async (req, res) => {
+  try {
+    const { id } = req.params; // ID ของเสาที่ถูกลาก
+    const { newOrder } = req.body; // ตำแหน่ง index ใหม่ที่ลากไปวาง
+
+    const category = await Category.findById(id);
+    if (!category) return res.status(404).json({ message: 'Category not found' });
+
+    const projectId = category.projectId;
+    const oldOrder = category.order;
+
+    if (oldOrder !== newOrder) {
+      if (newOrder > oldOrder) {
+        // ลากไปทางขวา: เสาที่อยู่ระหว่างทางต้องขยับมาทางซ้าย (-1)
+        await Category.updateMany(
+          { projectId, order: { $gt: oldOrder, $lte: newOrder } },
+          { $inc: { order: -1 } }
+        );
+      } else {
+        // ลากไปทางซ้าย: เสาที่ขวางทางอยู่ต้องขยับไปทางขวา (+1)
+        await Category.updateMany(
+          { projectId, order: { $gte: newOrder, $lt: oldOrder } },
+          { $inc: { order: 1 } }
+        );
+      }
+      
+      // อัปเดตตำแหน่งเสาตัวมันเอง
+      category.order = newOrder;
+      await category.save();
+    }
+
+    res.json({ message: 'Category moved successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 // (Optional) เดี๋ยวเราค่อยมาเพิ่ม API ย้าย/ลบ ทีหลังครับ

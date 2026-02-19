@@ -47,6 +47,7 @@ export default function Auth() {
 
   return (
     <div style={styles.container}>
+      <div style={styles.backgroundLayer}></div>
       <div style={styles.card}>
         <h2 style={styles.title}>{isLogin ? 'Login' : 'Sign Up'}</h2>
         
@@ -110,21 +111,51 @@ export default function Auth() {
 }
 
 const styles = {
-  container: { 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    minHeight: '100vh', 
-    backgroundColor: '#9a9a9a' 
+  container: {
+    position: 'relative', // สำคัญมาก! เพื่อให้กล่องรูปลอยอยู่ข้างหลังได้พอดี
+    height: 'calc(100vh - 60px)',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden', // สำคัญ: ป้องกันขอบรูปที่เบลอมันล้นออกไปนอกจอ
+    margin: 0,
+    padding: 0
+  },
+  backgroundLayer: {
+    position: 'absolute', // สั่งให้ลอยทับพื้นที่ของ container
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    
+    // ใส่รูปภาพตรงนี้
+    backgroundImage: "url('https://i.ibb.co/1YXwPr5m/Warm-Tone-Working-Space.png')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    
+    // --- ตัวแปรสำคัญ ---
+    filter: 'blur(5px)', // ทำให้รูปภาพเบลอ
+    transform: 'scale(1.05)', // ทริคลับ 💡: ขยายรูปนิดนึงเพื่อซ่อนขอบขาวๆ ที่มักจะเกิดเวลาทำเบลอ
+    zIndex: 0 // ดันเลเยอร์นี้ไปอยู่หลังสุด ตัวหนังสือจะได้ไม่โดนบัง
   },
   card: { 
-    backgroundColor: '#4a4a4a', 
+    // --- เปลี่ยนจากสีเทาทึบ เป็นกระจกโปร่งแสง ---
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // สีดำโปร่งแสง (ปรับความสว่างตรง 0.4)
+    backdropFilter: 'blur(10px)',          // พระเอกของงาน: ทำพื้นหลังใต้การ์ดให้เบลอเพิ่ม
+    WebkitBackdropFilter: 'blur(10px)',    // รองรับ Safari
+    border: '1px solid rgba(255, 255, 255, 0.15)', // ขอบกระจกบางๆ ให้ดูมีมิติสะท้อนแสง
+    // --------------------------------------
+
     padding: '40px', 
     borderRadius: '15px', 
-    boxShadow: '0 10px 25px rgba(0,0,0,0.3)', // เพิ่มเงาให้ดูมีมิติ
+    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)', // ปรับเงาให้ดูฟุ้งและลึกขึ้น
     width: '400px', 
-    maxWidth: '90%', // กันล้นจอโทรศัพท์
-    color: 'white' 
+    maxWidth: '90%', 
+    color: 'white',
+    position: 'relative',
+    zIndex: 1 // ป้องกันการโดนฉากหลังกลืน
   },
   title: { 
     textAlign: 'center', 
@@ -156,19 +187,20 @@ const styles = {
   input: { 
     padding: '12px', 
     borderRadius: '6px', 
-    border: 'none', 
-    backgroundColor: '#333', // สีพื้นหลัง Input เข้มๆ ตามรูป
+    border: '1px solid rgba(255, 255, 255, 0.2)', // ใส่ขอบบางๆ แทน
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', // สีพื้นหลังแบบโปร่งแสงมากๆ
     color: 'white', 
     fontSize: '16px',
-    width: '100%', // สำคัญ: ให้เต็มพื้นที่
-    boxSizing: 'border-box', // สำคัญมาก: ป้องกัน Padding ดันจนล้น
-    outline: 'none'
+    width: '100%', 
+    boxSizing: 'border-box', 
+    outline: 'none',
+    transition: '0.3s'
   },
   button: { 
     padding: '12px', 
     borderRadius: '6px', 
     border: 'none', 
-    backgroundColor: '#888', // สีปุ่มเทาๆ ตาม Theme
+    backgroundColor: '#4D3D2E', // สีปุ่มเทาๆ ตาม Theme
     color: 'white', 
     cursor: 'pointer', 
     marginTop: '10px', 
@@ -185,7 +217,7 @@ const styles = {
   link: { 
     textDecoration: 'underline', 
     cursor: 'pointer', 
-    color: '#fff',
+    color: '#4D3D2E',
     fontWeight: 'bold'
   }
 };

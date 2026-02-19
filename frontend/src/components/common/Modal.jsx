@@ -65,7 +65,8 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     backgroundColor: 'white',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    color:'black'
   },
   confirmBtn: {
     padding: '8px 16px',
