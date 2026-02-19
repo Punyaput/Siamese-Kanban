@@ -18,7 +18,6 @@ export default function Profile() {
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState('');
   
-  // 1. เพิ่ม State นี้เพื่อแก้ปัญหาหน้าจอ Blank
   const [isEditing, setIsEditing] = useState(false);
 
   const fetchProfile = async () => {
@@ -48,7 +47,7 @@ export default function Profile() {
       alert('บันทึกข้อมูลเรียบร้อย');
       setFormData(res.data);
       setIsEditingImage(false);
-      setIsEditing(false); // ปิดโหมดแก้ไข
+      setIsEditing(false); 
 
       const currentUser = JSON.parse(localStorage.getItem('user'));
       localStorage.setItem('user', JSON.stringify({ ...currentUser, ...res.data }));
@@ -66,19 +65,18 @@ export default function Profile() {
 
   const handleCancel = () => {
     setIsEditing(false);
-    fetchProfile(); // Reset ข้อมูลกลับ
+    fetchProfile(); 
   };
 
   return (
     <div style={styles.container}>
-
       <div style={styles.contentWrapper}>
         <div style={styles.header}>
            <h2 style={styles.headerTitle}>My Profile</h2>
         </div>
         
         <div style={styles.cardsContainer}>
-          {/* Card ซ้าย: รูปโปรไฟล์ */}
+          {/* Card ซ้าย */}
           <div style={styles.leftCard}>
             <div style={styles.avatarContainer}>
               <img 
@@ -90,9 +88,9 @@ export default function Profile() {
             </div>
             
             {isEditingImage ? (
-              <div style={{width: '100%', display:'flex', flexDirection:'column', gap:'5px'}}>
-                 <input type="text" placeholder="Image URL..." value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} style={styles.input} />
-                 <div style={{display:'flex', gap:'5px', justifyContent:'center'}}>
+              <div style={{width: '100%', display:'flex', flexDirection:'column', gap:'10px'}}>
+                 <input type="text" placeholder="Image URL..." value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} style={styles.inputImage} />
+                 <div style={{display:'flex', gap:'10px', justifyContent:'center'}}>
                    <button onClick={handleSave} style={styles.saveBtn}>Save</button>
                    <button onClick={() => { setIsEditingImage(false); setNewImageUrl(formData.profileImage); }} style={styles.cancelBtn}>Cancel</button>
                  </div>
@@ -102,25 +100,22 @@ export default function Profile() {
             )}
           </div>
 
-          {/* Card ขวา: ข้อมูลส่วนตัว */}
+          {/* Card ขวา */}
           <div style={styles.rightCard}>
-            
-            {/* Header: แสดงปุ่ม Edit มุมขวาบน */}
             <div style={styles.cardHeader}>
-              <h3 style={{margin: 0, color: '#666'}}>Personal Information</h3>
+              <h3 style={{margin: 0, color: '#2a2421', fontSize: '22px'}}>Personal Information</h3>
               {!isEditing && (
                 <button onClick={() => setIsEditing(true)} style={styles.editModeBtn}>
-                  edit
+                  Edit Profile
                 </button>
               )}
             </div>
 
-            {/* Form */}
             <div style={styles.row}>
               <div style={styles.formGroup}>
                 <label style={styles.label}>First Name</label>
                 <input 
-                  style={isEditing ? styles.input : styles.inputView} 
+                  style={isEditing ? styles.inputActive : styles.inputView} 
                   value={formData.firstName} 
                   onChange={(e) => setFormData({...formData, firstName: e.target.value})} 
                   readOnly={!isEditing}
@@ -129,7 +124,7 @@ export default function Profile() {
               <div style={styles.formGroup}>
                 <label style={styles.label}>Last Name</label>
                 <input 
-                  style={isEditing ? styles.input : styles.inputView} 
+                  style={isEditing ? styles.inputActive : styles.inputView} 
                   value={formData.lastName} 
                   onChange={(e) => setFormData({...formData, lastName: e.target.value})} 
                   readOnly={!isEditing}
@@ -139,20 +134,19 @@ export default function Profile() {
 
             <div style={styles.formGroup}>
               <label style={styles.label}>User ID</label>
-              <input style={{...styles.inputView, backgroundColor: '#f9f9f9', color: '#999'}} value={formData.user_id} readOnly />
+              <input style={{...styles.inputView, backgroundColor: '#f5f5f5', color: '#999'}} value={formData.user_id} readOnly />
             </div>
 
             <div style={styles.formGroup}>
               <label style={styles.label}>Email</label>
               <input 
-                style={isEditing ? styles.input : styles.inputView} 
+                style={isEditing ? styles.inputActive : styles.inputView} 
                 value={formData.email} 
                 onChange={(e) => setFormData({...formData, email: e.target.value})} 
                 readOnly={!isEditing}
               />
             </div>
 
-            {/* Footer Actions: ปุ่ม Logout หรือ Save อยู่ขวาล่าง */}
             <div style={styles.actionRow}>
                {!isEditing ? (
                  <button onClick={handleLogout} style={styles.logoutBtnLarge}>Logout</button>
@@ -171,103 +165,58 @@ export default function Profile() {
 }
 
 const styles = {
-  container: { minHeight: '100vh', backgroundColor: '#3a3a3a', fontFamily: 'Arial, sans-serif' },
-  contentWrapper: { padding: '40px', width: '100%', boxSizing: 'border-box' },
-  header: { marginBottom: '20px' },
+  container: { minHeight: '100vh', backgroundColor: '#2a2421', fontFamily: 'Arial, sans-serif' }, // สีพื้นหลัง
+  contentWrapper: { padding: '50px', width: '100%', boxSizing: 'border-box', maxWidth: '1200px', margin: '0 auto' },
+  header: { marginBottom: '30px' },
   
-  cardsContainer: { 
-    display: 'flex', 
-    gap: '30px', 
-    alignItems: 'flex-start', 
-    flexWrap: 'wrap', 
-    width: '100%' 
-  },
-  headerTitle: { color: 'white', marginBottom: '30px' },
+  cardsContainer: { display: 'flex', gap: '40px', alignItems: 'flex-start', flexWrap: 'wrap', width: '100%' },
+  headerTitle: { color: '#F6E2B3', marginBottom: '10px', fontSize: '28px', letterSpacing: '1px' },
+  
   leftCard: { 
-    backgroundColor: 'white', 
-    borderRadius: '15px', 
+    backgroundColor: '#ffffff', 
+    borderRadius: '20px', 
     padding: '40px', 
-    width: '350px', 
+    width: '320px', 
     flexShrink: 0, 
     display: 'flex', 
     flexDirection: 'column', 
     alignItems: 'center', 
-    boxShadow: '0 4px 10px rgba(0,0,0,0.1)' 
+    boxShadow: '0 10px 30px rgba(0,0,0,0.15)' 
   },
   
   rightCard: { 
-    backgroundColor: 'white', 
-    borderRadius: '15px', 
-    padding: '40px', 
+    backgroundColor: '#ffffff', 
+    borderRadius: '20px', 
+    padding: '40px 50px', 
     flex: 1, 
     minWidth: '400px', 
-    boxShadow: '0 4px 10px rgba(0,0,0,0.1)' 
-  },
-
-  // Header ภายใน Card ขวา
-  cardHeader: {
+    boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
-    borderBottom: '1px solid #eee',
-    paddingBottom: '10px',
-    width: '100%'
+    flexDirection: 'column'
   },
 
-  editModeBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#666',
-    cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    textDecoration: 'underline'
-  },
+  cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '2px solid #f0f0f0', paddingBottom: '15px', width: '100%' },
 
-  avatarContainer: { width: '200px', height: '200px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px', border: '5px solid #ccc' },
+  editModeBtn: { background: 'rgba(190, 155, 121, 0.15)', border: 'none', color: '#4D3D2E', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', padding: '8px 16px', borderRadius: '8px' },
+
+  avatarContainer: { width: '180px', height: '180px', borderRadius: '50%', overflow: 'hidden', marginBottom: '25px', border: '6px solid #f5f5f5', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' },
   avatar: { width: '100%', height: '100%', objectFit: 'cover' },
   
-  row: { display: 'flex', gap: '20px', marginBottom: '15px' },
-  formGroup: { flex: 1, display: 'flex', flexDirection: 'column', marginBottom: '15px' },
-  label: { fontWeight: 'bold', marginBottom: '5px', fontSize: '14px' },
+  row: { display: 'flex', gap: '25px', marginBottom: '20px' },
+  formGroup: { flex: 1, display: 'flex', flexDirection: 'column', marginBottom: '20px' },
+  label: { fontWeight: 'bold', marginBottom: '8px', fontSize: '13px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' },
   
-  // Input Styles
-  input: { 
-    padding: '10px', 
-    borderRadius: '5px', 
-    border: '1px solid #ccc', 
-    fontSize: '16px', 
-    width: '100%',
-    backgroundColor: '#fff' 
-  },
-  inputView: { 
-    padding: '10px', 
-    borderRadius: '5px', 
-    border: '1px solid transparent', 
-    fontSize: '16px', 
-    width: '100%',
-    backgroundColor: 'transparent',
-    fontWeight: '500',
-    color: '#333',
-    outline: 'none'
-  },
+  inputImage: { padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px', width: '100%', boxSizing: 'border-box', outline: 'none' },
+  inputActive: { padding: '14px', borderRadius: '10px', border: '1px solid #be9b79', fontSize: '16px', width: '100%', backgroundColor: '#fff', outline: 'none', color: '#333' },
+  inputView: { padding: '14px', borderRadius: '10px', border: '1px solid transparent', fontSize: '16px', width: '100%', backgroundColor: '#fcfcfc', fontWeight: '500', color: '#333', outline: 'none' },
 
-  // Buttons
-  editImageBtn: { padding: '8px 16px', backgroundColor: '#ddd', border: 'none', borderRadius: '5px', cursor: 'pointer' },
-  saveBtn: { padding: '5px 15px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' },
-  cancelBtn: { padding: '5px 15px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' },
+  editImageBtn: { padding: '10px 20px', backgroundColor: '#f0f0f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', color: '#555' },
+  saveBtn: { flex: 1, padding: '10px', backgroundColor: '#4D3D2E', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' },
+  cancelBtn: { flex: 1, padding: '10px', backgroundColor: '#e74c3c', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' },
   
-  // Action Row (Right Aligned)
-  actionRow: { 
-    display: 'flex', 
-    justifyContent: 'flex-end', 
-    gap: '10px',
-    marginTop: 'auto', 
-    paddingTop: '20px' 
-  },
+  actionRow: { display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '20px', paddingTop: '20px' },
   
-  saveBtnLarge: { padding: '12px 24px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' },
-  cancelBtnLarge: { padding: '12px 24px', backgroundColor: '#999', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px' },
-  logoutBtnLarge: { padding: '12px 24px', backgroundColor: '#ff4d4d', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }
+  saveBtnLarge: { padding: '14px 30px', backgroundColor: '#be9b79', color: '#2a2421', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' },
+  cancelBtnLarge: { padding: '14px 30px', backgroundColor: '#f0f0f0', color: '#555', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' },
+  logoutBtnLarge: { padding: '14px 30px', backgroundColor: '#e74c3c', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }
 };

@@ -53,43 +53,39 @@ export default function Auth() {
         
         <form onSubmit={handleSubmit} style={styles.form}>
           
-          {/* --- ส่วน Register --- */}
           {!isLogin && (
             <>
               <div style={styles.row}>
-                {/* เพิ่ม flex: 1 ตรงนี้เพื่อให้แบ่งครึ่งเท่ากัน */}
                 <div style={{...styles.inputGroup, flex: 1}}>
-                  <label style={styles.label}>First Name:</label>
+                  <label style={styles.label}>First Name</label>
                   <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required style={styles.input} />
                 </div>
-                {/* เพิ่ม flex: 1 ตรงนี้เช่นกัน */}
                 <div style={{...styles.inputGroup, flex: 1}}>
-                  <label style={styles.label}>Last Name:</label>
+                  <label style={styles.label}>Last Name</label>
                   <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required style={styles.input} />
                 </div>
               </div>
               
               <div style={styles.inputGroup}>
-                <label style={styles.label}>Email:</label>
+                <label style={styles.label}>Email</label>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required style={styles.input} />
               </div>
             </>
           )}
 
-          {/* --- ส่วน Login & Register --- */}
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Username (ID):</label>
+            <label style={styles.label}>Username (ID)</label>
             <input type="text" name="user_id" value={formData.user_id} onChange={handleChange} required style={styles.input} />
           </div>
           
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Password:</label>
+            <label style={styles.label}>Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} required style={styles.input} />
           </div>
 
           {!isLogin && (
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Confirm Password:</label>
+              <label style={styles.label}>Confirm Password</label>
               <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required style={styles.input} />
             </div>
           )}
@@ -100,9 +96,9 @@ export default function Auth() {
         </form>
 
         <p style={styles.toggleText}>
-          {isLogin ? "don't have an account? " : "already have an account? "}
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
           <span onClick={() => setIsLogin(!isLogin)} style={styles.link}>
-            {isLogin ? 'register' : 'login'}
+            {isLogin ? 'Register' : 'Login'}
           </span>
         </p>
       </div>
@@ -112,112 +108,112 @@ export default function Auth() {
 
 const styles = {
   container: {
-    position: 'relative', // สำคัญมาก! เพื่อให้กล่องรูปลอยอยู่ข้างหลังได้พอดี
+    position: 'relative', 
     height: 'calc(100vh - 60px)',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden', // สำคัญ: ป้องกันขอบรูปที่เบลอมันล้นออกไปนอกจอ
+    overflow: 'hidden', 
     margin: 0,
     padding: 0
   },
   backgroundLayer: {
-    position: 'absolute', // สั่งให้ลอยทับพื้นที่ของ container
+    position: 'absolute', 
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
-    
-    // ใส่รูปภาพตรงนี้
     backgroundImage: "url('https://i.ibb.co/1YXwPr5m/Warm-Tone-Working-Space.png')",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    
-    // --- ตัวแปรสำคัญ ---
-    filter: 'blur(5px)', // ทำให้รูปภาพเบลอ
-    transform: 'scale(1.05)', // ทริคลับ 💡: ขยายรูปนิดนึงเพื่อซ่อนขอบขาวๆ ที่มักจะเกิดเวลาทำเบลอ
-    zIndex: 0 // ดันเลเยอร์นี้ไปอยู่หลังสุด ตัวหนังสือจะได้ไม่โดนบัง
+    filter: 'blur(8px) brightness(0.7)', // เพิ่มความมืดให้รูปหลังนิดหน่อย การ์ดจะได้เด่น
+    transform: 'scale(1.05)', 
+    zIndex: 0 
   },
   card: { 
-    // --- เปลี่ยนจากสีเทาทึบ เป็นกระจกโปร่งแสง ---
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // สีดำโปร่งแสง (ปรับความสว่างตรง 0.4)
-    backdropFilter: 'blur(10px)',          // พระเอกของงาน: ทำพื้นหลังใต้การ์ดให้เบลอเพิ่ม
-    WebkitBackdropFilter: 'blur(10px)',    // รองรับ Safari
-    border: '1px solid rgba(255, 255, 255, 0.15)', // ขอบกระจกบางๆ ให้ดูมีมิติสะท้อนแสง
-    // --------------------------------------
-
-    padding: '40px', 
-    borderRadius: '15px', 
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)', // ปรับเงาให้ดูฟุ้งและลึกขึ้น
-    width: '400px', 
+    backgroundColor: 'rgba(30, 25, 22, 0.65)', // ปรับให้ติดโทนน้ำตาลเข้ม
+    backdropFilter: 'blur(16px)',          
+    WebkitBackdropFilter: 'blur(16px)',    
+    border: '1px solid rgba(190, 155, 121, 0.3)', // ขอบสีทองจางๆ
+    padding: '50px 40px', 
+    borderRadius: '24px', 
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)', 
+    width: '420px', 
     maxWidth: '90%', 
     color: 'white',
     position: 'relative',
-    zIndex: 1 // ป้องกันการโดนฉากหลังกลืน
+    zIndex: 1 
   },
   title: { 
     textAlign: 'center', 
-    marginBottom: '30px', 
-    fontSize: '28px',
-    fontWeight: 'bold'
+    marginBottom: '35px', 
+    fontSize: '32px',
+    fontWeight: '800',
+    color: '#F6E2B3', // ตัวหนังสือสีทองอ่อน
+    letterSpacing: '1px'
   },
   form: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '15px' 
+    gap: '20px' 
   },
   row: { 
     display: 'flex', 
-    gap: '15px', // ระยะห่างระหว่าง First-Last Name
+    gap: '15px', 
     width: '100%' 
   },
   inputGroup: { 
     display: 'flex', 
     flexDirection: 'column', 
     textAlign: 'left',
-    width: '100%' // ให้ input group เต็มความกว้างของ parent
+    width: '100%' 
   },
   label: {
-    marginBottom: '5px',
-    fontSize: '14px',
-    color: '#ddd'
+    marginBottom: '8px',
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#d4b497', // สีทองทราย
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px'
   },
   input: { 
-    padding: '12px', 
-    borderRadius: '6px', 
-    border: '1px solid rgba(255, 255, 255, 0.2)', // ใส่ขอบบางๆ แทน
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // สีพื้นหลังแบบโปร่งแสงมากๆ
+    padding: '14px', 
+    borderRadius: '10px', 
+    border: '1px solid rgba(190, 155, 121, 0.4)', 
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', 
     color: 'white', 
-    fontSize: '16px',
+    fontSize: '15px',
     width: '100%', 
     boxSizing: 'border-box', 
     outline: 'none',
     transition: '0.3s'
   },
   button: { 
-    padding: '12px', 
-    borderRadius: '6px', 
+    padding: '16px', 
+    borderRadius: '10px', 
     border: 'none', 
-    backgroundColor: '#4D3D2E', // สีปุ่มเทาๆ ตาม Theme
-    color: 'white', 
+    backgroundColor: '#be9b79', // ปุ่มสีทอง
+    color: '#2a2421', // ตัวอักษรสีเข้ม
     cursor: 'pointer', 
-    marginTop: '10px', 
+    marginTop: '15px', 
     fontSize: '16px',
     fontWeight: 'bold',
-    transition: '0.2s'
+    transition: '0.2s',
+    boxShadow: '0 4px 15px rgba(190, 155, 121, 0.3)'
   },
   toggleText: { 
-    marginTop: '20px', 
+    marginTop: '25px', 
     fontSize: '14px', 
     textAlign: 'center',
-    color: '#ccc'
+    color: '#a9a9a9'
   },
   link: { 
-    textDecoration: 'underline', 
+    textDecoration: 'none', 
     cursor: 'pointer', 
-    color: '#4D3D2E',
-    fontWeight: 'bold'
+    color: '#F6E2B3',
+    fontWeight: 'bold',
+    marginLeft: '5px'
   }
 };
