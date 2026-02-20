@@ -24,11 +24,13 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
       // ส่ง title, description, imageUrl ไปอัปเดตที่ Backend
-      await axios.put(`http://localhost:5000/api/tasks/${task._id}`, formData, {
+      await axios.put(`${API_BASE_URL}/api/tasks/${task._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       onUpdate();
@@ -55,7 +57,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
             <img src={formData.imageUrl} alt="Task" style={styles.image} />
           ) : (
             <div style={styles.imagePlaceholder}>
-               {isEditing ? 'No Image (Paste URL below)' : '< No Image >'}
+              {isEditing ? 'No Image (Paste URL below)' : '< No Image >'}
             </div>
           )}
         </div>
@@ -63,7 +65,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
         {isEditing ? (
           // === MODE EDIT ===
           <div style={styles.formContainer}>
-             <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="Paste Image URL here..." style={styles.urlInput} />
+            <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="Paste Image URL here..." style={styles.urlInput} />
             <input name="title" value={formData.title} onChange={handleChange} placeholder="Task Name" style={styles.titleInput} />
             <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Add more details..." rows={6} style={styles.descInput} />
 
@@ -76,18 +78,18 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
           // === MODE VIEW ===
           <div style={styles.viewContainer}>
             <div style={styles.headerRow}>
-                <h2 style={styles.viewTitle}>{formData.title}</h2>
-                <span style={styles.editLink} onClick={() => setIsEditing(true)}>edit</span>
+              <h2 style={styles.viewTitle}>{formData.title}</h2>
+              <span style={styles.editLink} onClick={() => setIsEditing(true)}>edit</span>
             </div>
             <div style={styles.viewDesc}>
-              {formData.description || <span style={{color:'#aaa', fontStyle:'italic'}}>No description provided.</span>}
+              {formData.description || <span style={{ color: '#aaa', fontStyle: 'italic' }}>No description provided.</span>}
             </div>
 
             {/* 3. เพิ่มปุ่มลบ (Delete) ไว้ด้านล่างสุด */}
             <div style={styles.deleteContainer}>
-               <button onClick={handleDeleteClick} style={styles.deleteBtn}>
-                 🗑️ Delete Task
-               </button>
+              <button onClick={handleDeleteClick} style={styles.deleteBtn}>
+                🗑️ Delete Task
+              </button>
             </div>
           </div>
         )}
@@ -104,7 +106,7 @@ const styles = {
   imageContainer: { width: '100%', height: '200px', backgroundColor: '#fff', borderRadius: '10px', marginBottom: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', border: '1px solid #ccc' },
   image: { width: '100%', height: '100%', objectFit: 'cover' },
   imagePlaceholder: { color: '#bbb' },
-  
+
   // Edit Mode Styles
   formContainer: { display: 'flex', flexDirection: 'column', gap: '10px' },
   urlInput: { padding: '8px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '12px', color: '#333', width: '100%', marginBottom: '10px' },

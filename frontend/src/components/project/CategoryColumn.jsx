@@ -2,23 +2,24 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import TaskCard from './TaskCard';
-import Modal from '../common/Modal'; 
-import TaskDetailModal from './TaskDetailModal'; 
+import Modal from '../common/Modal';
+import TaskDetailModal from './TaskDetailModal';
 
 // 1. รับ onDeleteCategory เข้ามาด้วย (ไม่งั้นกดลบไม่ได้)
 export default function CategoryColumn({ category, onDeleteCategory, dragHandleProps, refreshKey }) {
   const [tasks, setTasks] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-  const [newTaskContent, setNewTaskContent] = useState(''); 
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newTaskContent, setNewTaskContent] = useState('');
+
   const [selectedTask, setSelectedTask] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const token = localStorage.getItem('token');
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/${category._id}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/tasks/${category._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(res.data);
@@ -27,10 +28,10 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, {
+      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchTasks(); 
+      fetchTasks();
     } catch (err) { alert('ลบ Task ไม่สำเร็จ'); }
   };
 
@@ -39,8 +40,8 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
     if (!newTaskContent) return;
 
     try {
-      await axios.post('http://localhost:5000/api/tasks', 
-        { title: newTaskContent, categoryId: category._id }, 
+      await axios.post(`${API_BASE_URL}/api/tasks`,
+        { title: newTaskContent, categoryId: category._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setNewTaskContent('');
@@ -55,7 +56,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
     setSelectedTask(task);
     setIsDetailOpen(true);
   };
-  
+
   useEffect(() => {
     fetchTasks();
   }, [category._id, refreshKey]);
@@ -66,7 +67,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
         <input placeholder="Task Name..." value={newTaskContent} onChange={(e) => setNewTaskContent(e.target.value)} autoFocus style={{ width: '100%', padding: '10px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ddd' }} />
       </Modal>
 
-      <TaskDetailModal 
+      <TaskDetailModal
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
         task={selectedTask}
@@ -74,15 +75,15 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
         onDelete={handleDeleteTask} // <--- เพิ่มบรรทัดนี้
       />
 
-      <div 
+      <div
         style={styles.headerRow}
-        {...dragHandleProps} 
+        {...dragHandleProps}
       >
         <h3 style={styles.header}>{category.name}</h3>
-        <button 
+        <button
           // ใส่ onMouseDown เพื่อกันไม่ให้การกดปุ่มลบ กลายเป็นการลากเสา
-          onMouseDown={(e) => e.stopPropagation()} 
-          onClick={() => { if(window.confirm(`ลบ Catalog "${category.name}"?`)) onDeleteCategory(category._id); }} 
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={() => { if (window.confirm(`ลบ Catalog "${category.name}"?`)) onDeleteCategory(category._id); }}
           style={styles.deleteColBtn}
         >
           ✖
@@ -103,7 +104,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
                     style={{ ...styles.cardWrapper, ...provided.draggableProps.style }}
                   >
                     {/* เอาปุ่มลบ (x) ออกจากตรงนี้ก็ได้ครับ ถ้าอยากให้คลีนๆ */}
-                    <TaskCard task={task} /> 
+                    <TaskCard task={task} />
                   </div>
                 )}
               </Draggable>
@@ -126,7 +127,7 @@ const styles = {
   taskList: { flexGrow: 1, overflowY: 'auto', marginBottom: '10px', paddingRight: '5px' },
   addTaskBtn: { backgroundColor: 'transparent', border: 'none', color: '#5e6c84', padding: '8px', textAlign: 'left', cursor: 'pointer', borderRadius: '4px', fontSize: '14px', marginTop: 'auto', width: '100%' },
   cardWrapper: {
-    marginBottom: '10px', 
-    userSelect: 'none' 
+    marginBottom: '10px',
+    userSelect: 'none'
   }
 };

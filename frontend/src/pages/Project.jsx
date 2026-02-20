@@ -14,13 +14,15 @@ export default function Project() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCatalogName, setNewCatalogName] = useState('');
   const token = localStorage.getItem('token');
-  
+
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   // --- 1. เพิ่มฟังก์ชันดึงชื่อ Project ตรงนี้ ---
   const fetchProjectDetails = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/projects/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/projects/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProjectName(res.data.name); // นำชื่อโปรเจกต์ของจริงมาแสดง
@@ -32,7 +34,7 @@ export default function Project() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/categories/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/categories/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCategories(res.data);
@@ -42,7 +44,7 @@ export default function Project() {
 
   const handleDeleteCategory = async (catId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${catId}`, {
+      await axios.delete(`${API_BASE_URL}/api/categories/${catId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchCategories();
@@ -53,7 +55,7 @@ export default function Project() {
     e.preventDefault();
     if (!newCatalogName) return;
     try {
-      await axios.post('http://localhost:5000/api/categories', 
+      await axios.post(`${API_BASE_URL}/api/categories`,
         { name: newCatalogName, projectId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -81,30 +83,30 @@ export default function Project() {
 
     if (type === 'COLUMN') {
       try {
-        await axios.put(`http://localhost:5000/api/categories/move/${draggableId}`, 
+        await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`,
           { newOrder: destination.index },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setRefreshKey(prev => prev + 1); 
+        setRefreshKey(prev => prev + 1);
       } catch (err) {
         console.error(err);
         alert('ย้ายคอลัมน์ไม่สำเร็จ');
       }
-      return; 
+      return;
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/tasks/move/${draggableId}`, 
-        { 
-          categoryId: destination.droppableId, 
-          newOrder: destination.index          
+      await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`,
+        {
+          categoryId: destination.droppableId,
+          newOrder: destination.index
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setRefreshKey(prev => prev + 1); 
-    } catch (err) { 
+      setRefreshKey(prev => prev + 1);
+    } catch (err) {
       console.error(err);
-      alert('ย้ายงานไม่สำเร็จ'); 
+      alert('ย้ายงานไม่สำเร็จ');
     }
   };
 
@@ -112,30 +114,30 @@ export default function Project() {
     <div style={styles.container}>
       {/* จัดโครงสร้าง Header ให้อยู่ด้านบน */}
       <div style={styles.header}>
-        <h2 style={{color: '#F6E2B3', margin: 0, fontSize: '24px', letterSpacing: '0.5px'}}>
+        <h2 style={{ color: '#F6E2B3', margin: 0, fontSize: '24px', letterSpacing: '0.5px' }}>
           {projectName}
         </h2>
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        
+
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="New Catalog" onSubmit={handleCreateCategory}>
-          <input 
-            type="text" 
-            placeholder="Catalog Name..." 
-            value={newCatalogName} 
-            onChange={(e) => setNewCatalogName(e.target.value)} 
-            autoFocus 
-            style={{ width: '100%', padding: '12px', fontSize: '16px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none' }} 
+          <input
+            type="text"
+            placeholder="Catalog Name..."
+            value={newCatalogName}
+            onChange={(e) => setNewCatalogName(e.target.value)}
+            autoFocus
+            style={{ width: '100%', padding: '12px', fontSize: '16px', borderRadius: '8px', border: '1px solid #ddd', outline: 'none' }}
           />
         </Modal>
 
         <div style={styles.boardCanvas}>
           <Droppable droppableId="all-columns" direction="horizontal" type="COLUMN">
             {(provided) => (
-              <div 
-                style={styles.columnsContainer} 
-                {...provided.droppableProps} 
+              <div
+                style={styles.columnsContainer}
+                {...provided.droppableProps}
                 ref={provided.innerRef}
               >
                 {categories.map((category, index) => (
@@ -146,8 +148,8 @@ export default function Project() {
                         {...provided.draggableProps}
                         style={{ ...styles.columnWrapper, ...provided.draggableProps.style }}
                       >
-                        <CategoryColumn 
-                          category={category} 
+                        <CategoryColumn
+                          category={category}
                           onDeleteCategory={handleDeleteCategory}
                           dragHandleProps={provided.dragHandleProps}
                           refreshKey={refreshKey}
@@ -172,41 +174,41 @@ export default function Project() {
 }
 
 const styles = {
-  container: { 
-    height: 'calc(100vh - 60px)', 
-    display: 'flex', 
-    flexDirection: 'column', 
-    backgroundColor: '#2a2421', 
-    padding: '30px 40px' 
+  container: {
+    height: 'calc(100vh - 60px)',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#2a2421',
+    padding: '30px 40px'
   },
   header: { marginBottom: '30px' },
-  boardCanvas: { 
-    display: 'flex', 
-    overflowX: 'auto', 
-    height: '100%', 
+  boardCanvas: {
+    display: 'flex',
+    overflowX: 'auto',
+    height: '100%',
     alignItems: 'flex-start',
-    paddingBottom: '20px' 
+    paddingBottom: '20px'
   },
   columnsContainer: {
     display: 'flex',
     height: '100%'
   },
-  columnWrapper: { 
-    marginRight: '20px' 
+  columnWrapper: {
+    marginRight: '20px'
   },
-  newColumnBtn: { 
-    minWidth: '300px', 
-    height: '60px', 
-    backgroundColor: 'rgba(190, 155, 121, 0.05)', 
-    borderRadius: '12px', 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    color: '#be9b79', 
-    cursor: 'pointer', 
-    fontWeight: 'bold', 
+  newColumnBtn: {
+    minWidth: '300px',
+    height: '60px',
+    backgroundColor: 'rgba(190, 155, 121, 0.05)',
+    borderRadius: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#be9b79',
+    cursor: 'pointer',
+    fontWeight: 'bold',
     fontSize: '16px',
-    border: '2px dashed rgba(190, 155, 121, 0.4)', 
+    border: '2px dashed rgba(190, 155, 121, 0.4)',
     flexShrink: 0,
     transition: 'background-color 0.2s'
   }

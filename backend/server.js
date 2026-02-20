@@ -7,8 +7,10 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173' // Set this to your Vercel URL in Render settings
+}));
+app.use(express.json({ limit: '10kb' }));
 
 // เรียกใช้ Route ที่เราเพิ่งสร้างใน ./routes/auth.js
 const authRoutes = require('./routes/auth');
