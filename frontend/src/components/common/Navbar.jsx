@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import siameseLogo from '../../assets/SiameseLogo.png';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -14,17 +15,17 @@ export default function Navbar() {
   return (
     <div style={styles.navbar}>
       {/* Brand / Logo */}
-      <div 
+      <div
         style={{
-          ...styles.brand, 
-          cursor: isAuthPage ? 'default' : 'pointer' 
-        }} 
+          ...styles.brand,
+          cursor: isAuthPage ? 'default' : 'pointer'
+        }}
         onClick={isAuthPage ? null : () => navigate('/workspace')}
       >
         {/* --- โลโก้เดิมเป๊ะๆ ไม่มีการเปลี่ยนแปลง --- */}
-        <img 
-          src="https://image2url.com/r2/default/images/1771440606323-09353ab1-b699-4477-a77a-82435c4f938e.png" 
-          alt="Siamese Logo" 
+        <img
+          src={siameseLogo}
+          alt="Siamese Logo"
           style={styles.logoImage}
         />
         <span>Siamese</span>
@@ -33,9 +34,9 @@ export default function Navbar() {
       {/* แสดงส่วนขวา (Profile) เฉพาะเมื่อ "ไม่ใช่" หน้า Auth */}
       {!isAuthPage && (
         <div style={styles.rightSection}>
-          <img 
-            src={profileImage} 
-            alt="Profile" 
+          <img
+            src={profileImage}
+            alt="Profile"
             style={styles.avatar}
             onClick={() => navigate('/profile')}
             title="Go to Profile"

@@ -108,6 +108,8 @@ export default function Auth() {
   );
 }
 
+import workspaceBg from '../assets/workspace-bg.webp';
+
 const styles = {
   container: {
     position: 'relative',
@@ -126,7 +128,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundImage: "url('https://i.ibb.co/1YXwPr5m/Warm-Tone-Working-Space.png')",
+    backgroundImage: `url(${workspaceBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',

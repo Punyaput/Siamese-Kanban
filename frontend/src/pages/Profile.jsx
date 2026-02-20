@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
+import profilePlaceholder from '../assets/profile-placeholder.png';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ export default function Profile() {
                 src={newImageUrl || formData.profileImage}
                 alt="Profile"
                 style={styles.avatar}
-                onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'; }}
+                onError={(e) => { e.target.src = { profilePlaceholder }; }}
               />
             </div>
 
