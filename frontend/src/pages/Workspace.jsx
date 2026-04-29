@@ -72,7 +72,7 @@ export default function Workspace() {
     return () => window.removeEventListener('click', close);
   }, []);
 
-  const isOwner = (project) => project.ownerId === user.id || project.ownerId === user._id;
+  const isOwner = (project) => project.ownerId === user.user_id;
 
   if (loading) return (
     <div style={styles.loading}>

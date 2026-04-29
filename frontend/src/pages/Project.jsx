@@ -19,13 +19,16 @@ export default function Project() {
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [inviteUserId, setInviteUserId] = useState('');
   const [inviteMsg, setInviteMsg] = useState('');
-
+  const [projectData, setProjectData] = useState(null);
   const token = localStorage.getItem('token');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const fetchProjectDetails = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/projects/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get(`${API_BASE_URL}/api/projects/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProjectData(res.data);
       setProjectName(res.data.name);
     } catch { setProjectName('Board'); }
   };
@@ -87,13 +90,13 @@ export default function Project() {
     if (type === 'COLUMN') {
       try {
         await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`, { newOrder: destination.index }, { headers: { Authorization: `Bearer ${token}` } });
-        setRefreshKey(p => p + 1);
+        setTimeout(() => setRefreshKey(p => p + 1), 300);
       } catch { alert('Failed to move column'); }
       return;
     }
     try {
       await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`, { categoryId: destination.droppableId, newOrder: destination.index }, { headers: { Authorization: `Bearer ${token}` } });
-      setRefreshKey(p => p + 1);
+      setTimeout(() => setRefreshKey(p => p + 1), 300);
       fetchLogs();
     } catch { alert('Failed to move task'); }
   };
@@ -107,6 +110,14 @@ export default function Project() {
           <div>
             <div style={styles.headerEyebrow}>PROJECT BOARD</div>
             <h2 style={styles.headerTitle}>{projectName}</h2>
+            {projectData?.members?.length > 0 && (
+              <div style={styles.membersList}>
+                <span style={styles.membersLabel}>👥 Members:</span>
+                {projectData.members.map((m, i) => (
+                  <span key={i} style={styles.memberChip}>{m}</span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div style={styles.headerActions}>
@@ -261,4 +272,7 @@ const styles = {
   logAction: { fontSize: '11px', fontWeight: '700', color: '#be9b79', letterSpacing: '1px' },
   logTask: { fontSize: '13px', color: '#F6E2B3', margin: '2px 0', fontFamily: 'Georgia, serif' },
   logMeta: { fontSize: '11px', color: 'rgba(246,226,179,0.35)' },
+  membersList: { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px', flexWrap: 'wrap' },
+  membersLabel: { fontSize: '11px', color: 'rgba(190,155,121,0.5)', letterSpacing: '0.5px' },
+  memberChip: { fontSize: '11px', color: '#be9b79', backgroundColor: 'rgba(190,155,121,0.1)', border: '1px solid rgba(190,155,121,0.25)', padding: '2px 8px', borderRadius: '3px' },
 };

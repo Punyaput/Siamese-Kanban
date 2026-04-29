@@ -134,49 +134,31 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
 }
 
 const styles = {
-  // ... (styles เดิมทั้งหมด) ...
-  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
-  modal: { backgroundColor: '#e0e0e0', padding: '20px', borderRadius: '15px', width: '500px', maxWidth: '90%', position: 'relative', boxShadow: '0 4px 10px rgba(0,0,0,0.2)', maxHeight: '90vh', overflowY: 'auto' },
-  closeBtn: { position: 'absolute', top: '10px', right: '15px', fontSize: '24px', cursor: 'pointer', color: '#999' },
-  imageContainer: { width: '100%', height: '200px', backgroundColor: '#fff', borderRadius: '10px', marginBottom: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', border: '1px solid #ccc' },
+  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
+  modal: { backgroundColor: '#231a17', padding: '24px', borderRadius: '12px', width: '500px', maxWidth: '90%', position: 'relative', boxShadow: '0 20px 60px rgba(0,0,0,0.6)', maxHeight: '90vh', overflowY: 'auto', border: '1px solid rgba(190,155,121,0.2)' },
+  closeBtn: { position: 'absolute', top: '14px', right: '16px', fontSize: '20px', cursor: 'pointer', color: 'rgba(190,155,121,0.5)', lineHeight: 1 },
+  imageContainer: { width: '100%', height: '180px', backgroundColor: '#1a1210', borderRadius: '8px', marginBottom: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', border: '1px solid rgba(190,155,121,0.15)' },
   image: { width: '100%', height: '100%', objectFit: 'cover' },
-  imagePlaceholder: { color: '#bbb' },
-
-  // Edit Mode Styles
+  imagePlaceholder: { color: 'rgba(190,155,121,0.3)', fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '13px' },
   formContainer: { display: 'flex', flexDirection: 'column', gap: '10px' },
-  urlInput: { padding: '8px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '12px', color: '#333', width: '100%', marginBottom: '10px' },
-  titleInput: { padding: '10px', borderRadius: '5px', border: '1px solid #333', fontSize: '18px', fontWeight: 'bold', outline: 'none', backgroundColor: '#fff', color: '#333', width: '100%' },
-  descInput: { padding: '10px', borderRadius: '5px', border: '1px solid #333', fontSize: '14px', outline: 'none', resize: 'none', backgroundColor: '#fff', fontFamily: 'inherit', color: '#333', width: '100%', minHeight: '100px' },
-  footer: { display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px' },
-  cancelBtn: { padding: '10px 30px', borderRadius: '8px', border: 'none', backgroundColor: '#aaa', color: 'white', cursor: 'pointer', fontSize: '16px' },
-  applyBtn: { padding: '10px 30px', borderRadius: '8px', border: 'none', backgroundColor: '#666', color: 'white', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' },
-
-  // View Mode Styles
-  viewContainer: { padding: '5px', display: 'flex', flexDirection: 'column', gap: '10px' }, // เพิ่ม flex
+  urlInput: { padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '12px', color: '#F6E2B3', backgroundColor: '#1a1210', outline: 'none', width: '100%', fontFamily: 'Georgia, serif' },
+  titleInput: { padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.3)', fontSize: '18px', fontWeight: 'bold', outline: 'none', backgroundColor: '#1a1210', color: '#F6E2B3', width: '100%', fontFamily: 'Georgia, serif' },
+  descInput: { padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '14px', outline: 'none', resize: 'none', backgroundColor: '#1a1210', fontFamily: 'Georgia, serif', color: '#F6E2B3', width: '100%', minHeight: '100px' },
+  fieldRow: { display: 'flex', alignItems: 'center', gap: '10px' },
+  label: { fontSize: '12px', fontWeight: '600', color: 'rgba(190,155,121,0.7)', minWidth: '80px', letterSpacing: '0.5px', fontFamily: 'Georgia, serif' },
+  select: { padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '14px', backgroundColor: '#1a1210', color: '#F6E2B3', cursor: 'pointer', outline: 'none', fontFamily: 'Georgia, serif' },
+  assignInput: { flex: 1, padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '14px', backgroundColor: '#1a1210', color: '#F6E2B3', outline: 'none', fontFamily: 'Georgia, serif' },
+  footer: { display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '14px' },
+  cancelBtn: { padding: '9px 28px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', backgroundColor: 'transparent', color: 'rgba(246,226,179,0.6)', cursor: 'pointer', fontSize: '14px', fontFamily: 'Georgia, serif' },
+  applyBtn: { padding: '9px 28px', borderRadius: '6px', border: 'none', backgroundColor: '#be9b79', color: '#1a1210', cursor: 'pointer', fontSize: '14px', fontWeight: '700', fontFamily: 'Georgia, serif' },
+  viewContainer: { padding: '4px', display: 'flex', flexDirection: 'column', gap: '12px' },
   headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
-  viewTitle: { margin: '0 0 10px 0', fontSize: '24px', fontWeight: 'bold', color: '#333' },
-  editLink: { color: '#666', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px' },
-  viewDesc: { whiteSpace: 'pre-wrap', color: '#333', lineHeight: '1.5', fontSize: '14px', minHeight: '50px' },
-
-  // --- 4. Styles สำหรับปุ่มลบ ---
-  deleteContainer: {
-    marginTop: '20px',
-    borderTop: '1px solid #ccc',
-    paddingTop: '15px',
-    display: 'flex',
-    justifyContent: 'flex-end' // จัดชิดขวา
-  },
-  deleteBtn: {
-    backgroundColor: '#ff4d4d', // สีแดง
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    padding: '8px 15px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    fontSize: '14px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '5px'
-  }
+  viewTitle: { margin: 0, fontSize: '22px', fontWeight: '700', color: '#F6E2B3', fontFamily: 'Georgia, serif', lineHeight: 1.3 },
+  editLink: { color: '#be9b79', textDecoration: 'underline', cursor: 'pointer', fontSize: '13px', fontFamily: 'Georgia, serif', flexShrink: 0, marginLeft: '12px' },
+  metaRow: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
+  priorityBadge: { fontSize: '12px', fontWeight: '600', padding: '3px 10px', borderRadius: '4px' },
+  assigneeBadge: { fontSize: '12px', color: 'rgba(246,226,179,0.6)', backgroundColor: 'rgba(190,155,121,0.1)', padding: '3px 10px', borderRadius: '4px', border: '1px solid rgba(190,155,121,0.2)' },
+  viewDesc: { whiteSpace: 'pre-wrap', color: 'rgba(246,226,179,0.7)', lineHeight: '1.6', fontSize: '14px', minHeight: '50px', fontFamily: 'Georgia, serif' },
+  deleteContainer: { marginTop: '16px', borderTop: '1px solid rgba(190,155,121,0.1)', paddingTop: '14px', display: 'flex', justifyContent: 'flex-end' },
+  deleteBtn: { backgroundColor: 'transparent', color: '#e07070', border: '1px solid rgba(224,112,112,0.3)', borderRadius: '5px', padding: '7px 14px', cursor: 'pointer', fontWeight: '600', fontSize: '13px', fontFamily: 'Georgia, serif' }
 };
