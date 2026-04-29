@@ -60,7 +60,10 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
   useEffect(() => { fetchTasks(); }, [category._id]);
 
   useEffect(() => {
-    if (refreshKey > 0) fetchTasks();
+    if (refreshKey > 0) {
+      const t = setTimeout(() => fetchTasks(), 500);
+      return () => clearTimeout(t);
+    }
   }, [refreshKey]);
 
   return (
