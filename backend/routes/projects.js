@@ -9,4 +9,7 @@ router.get('/:id', authMiddleware, getProjectById);
 router.put('/:id', authMiddleware, updateProject);   // สำหรับ Rename
 router.delete('/:id', authMiddleware, deleteProject); // สำหรับ Delete
 
+const { getProjects, createProject, updateProject, deleteProject, getProjectById, inviteMember } = require('../controllers/projectController');
+router.post('/:id/invite', authMiddleware, inviteMember); // [CR-00010]
+
 module.exports = router;
