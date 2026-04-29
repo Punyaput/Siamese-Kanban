@@ -1,97 +1,115 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import siameseLogo from '../../assets/SiameseLogo.png';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [hovered, setHovered] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user')) || {};
-  const profileImage = user.profileImage || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541';
-
-  // เช็คว่าเป็นหน้า Auth หรือ Welcome (/) หรือไม่?
   const isAuthPage = location.pathname === '/auth' || location.pathname === '/';
+  const initial = (user.firstName || user.user_id || '?')[0].toUpperCase();
 
   return (
-    <div style={styles.navbar}>
-      {/* Brand / Logo */}
+    <nav style={styles.navbar}>
       <div
-        style={{
-          ...styles.brand,
-          cursor: isAuthPage ? 'default' : 'pointer'
-        }}
+        style={{ ...styles.brand, cursor: isAuthPage ? 'default' : 'pointer' }}
         onClick={isAuthPage ? null : () => navigate('/workspace')}
       >
-        {/* --- โลโก้เดิมเป๊ะๆ ไม่มีการเปลี่ยนแปลง --- */}
-        <img
-          src={siameseLogo}
-          alt="Siamese Logo"
-          style={styles.logoImage}
-        />
-        <span>Siamese</span>
+        <img src={siameseLogo} alt="Siamese Logo" style={styles.logo} />
+        <span style={styles.brandName}>Siamese</span>
       </div>
 
-      {/* แสดงส่วนขวา (Profile) เฉพาะเมื่อ "ไม่ใช่" หน้า Auth */}
       {!isAuthPage && (
-        <div style={styles.rightSection}>
-          <img
-            src={profileImage}
-            alt="Profile"
-            style={styles.avatar}
+        <div style={styles.right}>
+          <span style={styles.greeting}>
+            {user.firstName ? `Hello, ${user.firstName}` : user.user_id}
+          </span>
+          <div
+            style={{
+              ...styles.avatar,
+              ...(hovered ? styles.avatarHover : {})
+            }}
             onClick={() => navigate('/profile')}
-            title="Go to Profile"
-            onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
-            onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
-          />
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            title="Profile"
+          >
+            {initial}
+          </div>
         </div>
       )}
-    </div>
+    </nav>
   );
 }
 
 const styles = {
   navbar: {
-    height: '60px',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)', // ขาวแบบโปร่งแสงนิดๆ
-    backdropFilter: 'blur(10px)', // เอฟเฟกต์กระจกเบาๆ
-    WebkitBackdropFilter: 'blur(10px)',
+    height: '64px',
+    backgroundColor: '#1a1210',
+    borderBottom: '1px solid rgba(190,155,121,0.25)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 30px', // เพิ่มพื้นที่ว่างซ้ายขวาให้ดูไม่อึดอัด
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)', // ปรับเงาให้ฟุ้งและดูแพงขึ้น
-    borderBottom: '1px solid rgba(190, 155, 121, 0.2)', // ขอบล่างสีทองจางๆ คุมโทน
+    padding: '0 36px',
     position: 'sticky',
     top: 0,
-    zIndex: 100
+    zIndex: 200,
+    boxShadow: '0 2px 24px rgba(0,0,0,0.4)',
   },
   brand: {
-    color: '#4D3D2E',
-    fontSize: '26px', // ปรับขนาดตัวหนังสือให้บาลานซ์กับ Navbar 60px
-    fontWeight: '800',
     display: 'flex',
     alignItems: 'center',
-    letterSpacing: '0.5px'
+    gap: '12px',
+    textDecoration: 'none',
   },
-  logoImage: {
-    width: '45px', // ลดขนาดรูปลงนิดนึงไม่ให้ชนขอบบนล่าง
-    height: '45px',
+  logo: {
+    width: '38px',
+    height: '38px',
     objectFit: 'contain',
-    marginRight: '12px' // เพิ่มระยะห่างระหว่างโลโก้กับตัวหนังสือ
   },
-  rightSection: {
+  brandName: {
+    fontSize: '22px',
+    fontWeight: '800',
+    fontFamily: 'Georgia, serif',
+    background: 'linear-gradient(135deg, #be9b79, #F6E2B3, #be9b79)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    letterSpacing: '1px',
+  },
+  right: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: '16px',
+  },
+  greeting: {
+    color: 'rgba(246,226,179,0.6)',
+    fontSize: '14px',
+    fontFamily: 'Georgia, serif',
+    letterSpacing: '0.3px',
   },
   avatar: {
-    width: '42px',
-    height: '42px',
+    width: '38px',
+    height: '38px',
     borderRadius: '50%',
-    objectFit: 'cover',
+    backgroundColor: '#4D3D2E',
+    border: '2px solid #be9b79',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#F6E2B3',
+    fontWeight: '800',
+    fontSize: '16px',
     cursor: 'pointer',
-    border: '2px solid #be9b79', // ดึงสีทอง/ทรายจาก Theme มาใช้เป็นกรอบรูป
-    backgroundColor: '#f5f5f5',
-    transition: 'transform 0.2s ease', // เพิ่ม Animation ตอนเอาเมาส์ชี้
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-  }
+    fontFamily: 'Georgia, serif',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 0 0 0 rgba(190,155,121,0)',
+  },
+  avatarHover: {
+    backgroundColor: '#be9b79',
+    color: '#1a1210',
+    boxShadow: '0 0 0 3px rgba(190,155,121,0.3)',
+    transform: 'scale(1.08)',
+  },
 };
