@@ -104,7 +104,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
                     style={{ ...styles.cardWrapper, ...provided.draggableProps.style }}
                   >
                     {/* เอาปุ่มลบ (x) ออกจากตรงนี้ก็ได้ครับ ถ้าอยากให้คลีนๆ */}
-                    <TaskCard task={task} />
+                    <TaskCard task={task} onClick={() => handleCardClick(task)} />
                   </div>
                 )}
               </Draggable>
