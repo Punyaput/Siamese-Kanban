@@ -17,6 +17,9 @@ export default function Project() {
 
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const [logs, setLogs] = useState([]);
+  const [showLogs, setShowLogs] = useState(false);
+
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   // --- 1. เพิ่มฟังก์ชันดึงชื่อ Project ตรงนี้ ---
@@ -40,6 +43,17 @@ export default function Project() {
       setCategories(res.data);
       // เอา setProjectName แบบเก่าออกไปแล้วครับ
     } catch (err) { console.error(err); }
+  };
+
+  const fetchLogs = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/api/logs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLogs(res.data);
+    } catch (err) {
+      console.error('Error fetching logs:', err);
+    }
   };
 
   const handleDeleteCategory = async (catId) => {
@@ -73,6 +87,7 @@ export default function Project() {
     }
     fetchProjectDetails(); // ดึงชื่อโปรเจกต์
     fetchCategories();     // ดึงเสาต่างๆ
+    fetchLogs();
   }, [id, refreshKey, token, navigate]);
 
   const onDragEnd = async (result) => {
@@ -169,6 +184,29 @@ export default function Project() {
         </div>
 
       </DragDropContext>
+
+      {/* [CR-00008] Activity History Panel (FR-U4.2) */}
+      <div style={styles.logPanel}>
+        <div style={styles.logHeader} onClick={() => { setShowLogs(!showLogs); if (!showLogs) fetchLogs(); }}>
+          <span>📋 Activity History</span>
+          <span>{showLogs ? '▲' : '▼'}</span>
+        </div>
+        {showLogs && (
+          <div style={styles.logList}>
+            {logs.length === 0 ? (
+              <div style={styles.logEmpty}>No activity yet.</div>
+            ) : (
+              logs.map((log, i) => (
+                <div key={i} style={styles.logItem}>
+                  <span style={styles.logAction}>{log.action}</span>
+                  <span style={styles.logTask}>"{log.taskTitle}"</span>
+                  <span style={styles.logMeta}>by {log.performedBy} · {new Date(log.createdAt).toLocaleString()}</span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -211,5 +249,13 @@ const styles = {
     border: '2px dashed rgba(190, 155, 121, 0.4)',
     flexShrink: 0,
     transition: 'background-color 0.2s'
-  }
+  },
+  logPanel: { position: 'fixed', bottom: 0, right: '30px', width: '340px', backgroundColor: '#1e1b18', borderRadius: '10px 10px 0 0', border: '1px solid rgba(190,155,121,0.3)', zIndex: 500 },
+  logHeader: { padding: '10px 16px', color: '#F6E2B3', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: 'bold' },
+  logList: { maxHeight: '220px', overflowY: 'auto', padding: '8px 16px 12px' },
+  logEmpty: { color: '#888', fontSize: '13px', textAlign: 'center', padding: '10px' },
+  logItem: { display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '8px' },
+  logAction: { fontSize: '12px', fontWeight: 'bold', color: '#be9b79' },
+  logTask: { fontSize: '13px', color: '#eee' },
+  logMeta: { fontSize: '11px', color: '#888' }
 };

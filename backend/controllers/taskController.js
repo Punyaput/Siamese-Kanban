@@ -1,4 +1,11 @@
+const AuditLog = require('../models/AuditLog'); // [CR-00008]
+const Category = require('../models/Category');  // [CR-00008]
 const Task = require('../models/Task');
+
+async function getProjectId(categoryId) {
+  const cat = await Category.findById(categoryId);
+  return cat ? cat.projectId : null;
+}
 
 // 1. ดึง Task ทั้งหมดใน Category หนึ่งๆ
 exports.getTasks = async (req, res) => {
@@ -15,7 +22,7 @@ exports.getTasks = async (req, res) => {
 exports.createTask = async (req, res) => {
   try {
     // รับ title แทน content
-    const { title, categoryId } = req.body; 
+    const { title, categoryId } = req.body;
 
     const lastTask = await Task.findOne({ categoryId }).sort({ order: -1 });
     const newOrder = lastTask ? lastTask.order + 1 : 0;
@@ -28,6 +35,17 @@ exports.createTask = async (req, res) => {
     });
 
     await newTask.save();
+
+    const projectId = await getProjectId(categoryId);
+    if (projectId) {
+      await AuditLog.create({
+        action: 'Created',
+        taskTitle: title,
+        projectId,
+        performedBy: req.user.user_id || 'Unknown'
+      });
+    }
+
     res.json(newTask);
   } catch (err) {
     res.status(500).json({ message: 'Server Error' });
@@ -57,13 +75,21 @@ exports.updateTask = async (req, res) => {
 
 // 4. ลบ Task
 exports.deleteTask = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
+  const task = await Task.findById(id);
+  if (task) {
+    const projectId = await getProjectId(task.categoryId);
+    if (projectId) {
+      await AuditLog.create({
+        action: 'Deleted',
+        taskTitle: task.title,
+        projectId,
+        performedBy: req.user.user_id || 'Unknown'
+      });
+    }
     await Task.findByIdAndDelete(id);
-    res.json({ message: 'Task deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Server Error' });
   }
+  res.json({ message: 'Task deleted successfully' });
 };
 
 exports.moveTask = async (req, res) => {
@@ -97,7 +123,7 @@ exports.moveTask = async (req, res) => {
         task.order = newOrder;
         await task.save();
       }
-    } 
+    }
     // === กรณีที่ 2: ย้ายข้ามเสา (Move Column) ===
     else {
       // 1. จัดการเสาเก่า: ใครที่อยู่ต่อจากมัน ให้ขยับขึ้นมาแทนที่ (-1)
@@ -116,6 +142,16 @@ exports.moveTask = async (req, res) => {
       task.categoryId = categoryId;
       task.order = newOrder;
       await task.save();
+
+      const projectId = await getProjectId(categoryId);
+      if (projectId) {
+        await AuditLog.create({
+          action: 'Moved',
+          taskTitle: task.title,
+          projectId,
+          performedBy: req.user.user_id || 'Unknown'
+        });
+      }
     }
 
     res.json({ message: 'Task moved successfully' });
