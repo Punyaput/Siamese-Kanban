@@ -45,8 +45,13 @@ export default function CategoryColumn({ category, tasks = [], onDeleteCategory,
           autoFocus style={{ width: '100%', padding: '10px', fontSize: '14px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.3)', backgroundColor: '#2e2118', color: '#F6E2B3', outline: 'none' }} />
       </Modal>
 
-      <TaskDetailModal isOpen={isDetailOpen} onClose={() => setIsDetailOpen(false)}
-        task={selectedTask} onUpdate={onTaskChange} onDelete={handleDeleteTask} />
+      <TaskDetailModal
+        isOpen={isDetailOpen}
+        onClose={() => { setIsDetailOpen(false); setSelectedTask(null); }}
+        task={selectedTask}
+        onUpdate={() => { onTaskChange(); setIsDetailOpen(false); }}
+        onDelete={handleDeleteTask}
+      />
 
       <div style={styles.headerRow} {...dragHandleProps}>
         <div style={styles.headerLeft}>
@@ -72,7 +77,10 @@ export default function CategoryColumn({ category, tasks = [], onDeleteCategory,
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    onClick={() => { setSelectedTask(task); setIsDetailOpen(true); }}
+                    onClick={() => {
+                      setSelectedTask(tasks.find(t => t._id === task._id) || task);
+                      setIsDetailOpen(true);
+                    }}
                     style={{ ...styles.cardWrapper, ...(snapshot.isDragging ? styles.cardDragging : {}), ...provided.draggableProps.style }}
                   >
                     <TaskCard task={task} />
