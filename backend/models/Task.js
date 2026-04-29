@@ -34,6 +34,7 @@ const taskSchema = new mongoose.Schema({
   description: { type: String, default: '' }, // รายละเอียดข้างใน
   imageUrl: { type: String, default: '' },
   priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Medium' }, // [CR-00005]
+  assignedTo: { type: String, default: '' }, // [CR-00007]
   categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   order: { type: Number, default: 0 }
 }, { timestamps: true });

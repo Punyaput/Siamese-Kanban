@@ -10,6 +10,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
     description: task.description || '',
     imageUrl: task.imageUrl || '',
     priority: task.priority || 'Medium',
+    assignedTo: task.assignedTo || '',
   });
 
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
       description: task.description || '',
       imageUrl: task.imageUrl || '',
       priority: task.priority || 'Medium',
+      assignedTo: task.assignedTo || '',
     });
     setIsEditing(false);
   }, [task]);
@@ -81,6 +83,13 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
               </select>
             </div>
 
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#555', minWidth: '80px' }}>Assigned To</label>
+              <input name="assignedTo" value={formData.assignedTo} onChange={handleChange}
+                placeholder="Enter name..."
+                style={{ flex: 1, padding: '6px 10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '14px', backgroundColor: '#fff' }} />
+            </div>
+
             <div style={styles.footer}>
               <button onClick={() => setIsEditing(false)} style={styles.cancelBtn}>Cancel</button>
               <button onClick={handleSave} style={styles.applyBtn}>Apply</button>
@@ -98,6 +107,12 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
               }}>
                 ⚑ {formData.priority} Priority
               </span>
+
+              {formData.assignedTo && (
+                <span style={{ fontSize: '12px', color: '#666', backgroundColor: '#f0f0f0', padding: '3px 10px', borderRadius: '10px' }}>
+                  👤 {formData.assignedTo}
+                </span>
+              )}
 
               <span style={styles.editLink} onClick={() => setIsEditing(true)}>edit</span>
             </div>

@@ -18,6 +18,11 @@ export default function TaskCard({ task, onClick }) {
         <span style={{ ...styles.badge, backgroundColor: colors.bg, color: colors.text }}>
           {priority}
         </span>
+        {task.assignedTo && (
+          <span style={{ fontSize: '11px', color: '#666', backgroundColor: '#f0f0f0', padding: '2px 8px', borderRadius: '10px' }}>
+            👤 {task.assignedTo}
+          </span>
+        )}
       </div>
     </div>
   );
