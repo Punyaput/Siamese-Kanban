@@ -80,9 +80,9 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
             <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Add more details..." rows={6} style={styles.descInput} />
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#555', minWidth: '80px' }}>Priority</label>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'rgba(190,155,121,0.7)', minWidth: '80px', fontFamily: 'Georgia, serif' }}>Priority</label>
               <select name="priority" value={formData.priority} onChange={handleChange}
-                style={{ padding: '6px 10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '14px', backgroundColor: '#fff' }}>
+                style={{ padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '14px', backgroundColor: '#1a1210', color: '#F6E2B3', outline: 'none', fontFamily: 'Georgia, serif' }}>
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
@@ -90,10 +90,10 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#555', minWidth: '80px' }}>Assigned To</label>
+              <label style={{ fontSize: '12px', fontWeight: '600', color: 'rgba(190,155,121,0.7)', minWidth: '80px', fontFamily: 'Georgia, serif' }}>Assigned To</label>
               <input name="assignedTo" value={formData.assignedTo} onChange={handleChange}
                 placeholder="Enter name..."
-                style={{ flex: 1, padding: '6px 10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '14px', backgroundColor: '#fff' }} />
+                style={{ flex: 1, padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.2)', fontSize: '14px', backgroundColor: '#1a1210', color: '#F6E2B3', outline: 'none', fontFamily: 'Georgia, serif' }} />
             </div>
 
             <div style={styles.footer}>
