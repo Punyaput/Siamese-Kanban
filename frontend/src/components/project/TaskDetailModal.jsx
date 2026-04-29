@@ -8,14 +8,16 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
   const [formData, setFormData] = useState({
     title: task.title || '',
     description: task.description || '',
-    imageUrl: task.imageUrl || ''
+    imageUrl: task.imageUrl || '',
+    priority: task.priority || 'Medium',
   });
 
   useEffect(() => {
     setFormData({
       title: task.title || '',
       description: task.description || '',
-      imageUrl: task.imageUrl || ''
+      imageUrl: task.imageUrl || '',
+      priority: task.priority || 'Medium',
     });
     setIsEditing(false);
   }, [task]);
@@ -69,6 +71,16 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
             <input name="title" value={formData.title} onChange={handleChange} placeholder="Task Name" style={styles.titleInput} />
             <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Add more details..." rows={6} style={styles.descInput} />
 
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label style={{ fontSize: '13px', fontWeight: 'bold', color: '#555', minWidth: '80px' }}>Priority</label>
+              <select name="priority" value={formData.priority} onChange={handleChange}
+                style={{ padding: '6px 10px', borderRadius: '5px', border: '1px solid #ccc', fontSize: '14px', backgroundColor: '#fff' }}>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
             <div style={styles.footer}>
               <button onClick={() => setIsEditing(false)} style={styles.cancelBtn}>Cancel</button>
               <button onClick={handleSave} style={styles.applyBtn}>Apply</button>
@@ -79,6 +91,14 @@ export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDel
           <div style={styles.viewContainer}>
             <div style={styles.headerRow}>
               <h2 style={styles.viewTitle}>{formData.title}</h2>
+
+              <span style={{
+                fontSize: '12px', fontWeight: 'bold', padding: '3px 10px', borderRadius: '10px',
+                backgroundColor: priorityColors[formData.priority]?.bg, color: priorityColors[formData.priority]?.text
+              }}>
+                ⚑ {formData.priority} Priority
+              </span>
+
               <span style={styles.editLink} onClick={() => setIsEditing(true)}>edit</span>
             </div>
             <div style={styles.viewDesc}>
