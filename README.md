@@ -98,15 +98,14 @@ Create a `.env` file in the `backend` folder and add the following:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/siamese_db
-JWT_SECRET=your_super_secure_secret_key
+MONGO_URI={your_mongodb_uri_here}
 
 ```
 
 Start the server:
 
 ```bash
-npm run dev
+node server.js
 # Server will run on http://localhost:5000
 
 ```
@@ -195,6 +194,7 @@ Developed by **Phattaraphol Saeheng** - Software Engineering Student.
 ```
 
 ```
+
 
 
 
