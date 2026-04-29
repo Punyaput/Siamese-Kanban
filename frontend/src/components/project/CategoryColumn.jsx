@@ -1,108 +1,81 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import TaskCard from './TaskCard';
 import Modal from '../common/Modal';
 import TaskDetailModal from './TaskDetailModal';
 
-// 1. รับ onDeleteCategory เข้ามาด้วย (ไม่งั้นกดลบไม่ได้)
-export default function CategoryColumn({ category, onDeleteCategory, dragHandleProps }) {
-  const [tasks, setTasks] = useState([]);
+export default function CategoryColumn({ category, tasks = [], onDeleteCategory, dragHandleProps, onTaskChange }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTaskContent, setNewTaskContent] = useState('');
-
   const [selectedTask, setSelectedTask] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const token = localStorage.getItem('token');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  const fetchTasks = async () => {
-    try {
-      const res = await axios.get(`${API_BASE_URL}/api/tasks/${category._id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setTasks(res.data);
-    } catch (err) { console.error(err); }
-  };
-
   const handleDeleteTask = async (taskId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchTasks();
-    } catch (err) { alert('ลบ Task ไม่สำเร็จ'); }
+      await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`, { headers: { Authorization: `Bearer ${token}` } });
+      onTaskChange();
+    } catch { alert('Failed to delete task'); }
   };
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
     if (!newTaskContent) return;
-
     try {
       await axios.post(`${API_BASE_URL}/api/tasks`,
         { title: newTaskContent, categoryId: category._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setNewTaskContent('');
-      setIsModalOpen(false);
-      fetchTasks();
-    } catch (err) {
-      alert('สร้าง Task ไม่สำเร็จ');
-    }
+      setNewTaskContent(''); setIsModalOpen(false); onTaskChange();
+    } catch { alert('Failed to create task'); }
   };
-
-  const handleCardClick = (task) => {
-    setSelectedTask(task);
-    setIsDetailOpen(true);
-  };
-
-  useEffect(() => { fetchTasks(); }, [category._id]);
 
   return (
-    <div style={styles.column}>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Task" onSubmit={handleCreateTask}>
-        <input placeholder="Task Name..." value={newTaskContent} onChange={(e) => setNewTaskContent(e.target.value)} autoFocus style={{ width: '100%', padding: '10px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ddd' }} />
+    <div
+      style={{ ...styles.column, ...(isHovered ? styles.columnHovered : {}) }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="New Task" onSubmit={handleCreateTask}>
+        <input placeholder="Task name..." value={newTaskContent} onChange={e => setNewTaskContent(e.target.value)}
+          autoFocus style={{ width: '100%', padding: '10px', fontSize: '14px', borderRadius: '6px', border: '1px solid rgba(190,155,121,0.3)', backgroundColor: '#2e2118', color: '#F6E2B3', outline: 'none' }} />
       </Modal>
 
-      <TaskDetailModal
-        isOpen={isDetailOpen}
-        onClose={() => setIsDetailOpen(false)}
-        task={selectedTask}
-        onUpdate={fetchTasks}
-        onDelete={handleDeleteTask} // <--- เพิ่มบรรทัดนี้
-      />
+      <TaskDetailModal isOpen={isDetailOpen} onClose={() => setIsDetailOpen(false)}
+        task={selectedTask} onUpdate={onTaskChange} onDelete={handleDeleteTask} />
 
-      <div
-        style={styles.headerRow}
-        {...dragHandleProps}
-      >
-        <h3 style={styles.header}>{category.name}</h3>
+      <div style={styles.headerRow} {...dragHandleProps}>
+        <div style={styles.headerLeft}>
+          <div style={styles.headerDot} />
+          <h3 style={styles.header}>{category.name}</h3>
+          <span style={styles.taskCount}>{tasks.length}</span>
+        </div>
         <button
-          // ใส่ onMouseDown เพื่อกันไม่ให้การกดปุ่มลบ กลายเป็นการลากเสา
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={() => { if (window.confirm(`ลบ Catalog "${category.name}"?`)) onDeleteCategory(category._id); }}
+          onMouseDown={e => e.stopPropagation()}
+          onClick={() => { if (window.confirm(`Delete column "${category.name}"?`)) onDeleteCategory(category._id); }}
           style={styles.deleteColBtn}
-        >
-          ✖
-        </button>
+        >✕</button>
       </div>
 
       <Droppable droppableId={category._id}>
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef} style={styles.taskList}>
+        {(provided, snapshot) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}
+            style={{ ...styles.taskList, ...(snapshot.isDraggingOver ? styles.taskListOver : {}) }}>
             {tasks.map((task, index) => (
               <Draggable key={task._id} draggableId={task._id} index={index}>
-                {(provided) => (
+                {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    onClick={() => handleCardClick(task)}
-                    style={{ ...styles.cardWrapper, ...provided.draggableProps.style }}
+                    onClick={() => { setSelectedTask(task); setIsDetailOpen(true); }}
+                    style={{ ...styles.cardWrapper, ...(snapshot.isDragging ? styles.cardDragging : {}), ...provided.draggableProps.style }}
                   >
-                    {/* เอาปุ่มลบ (x) ออกจากตรงนี้ก็ได้ครับ ถ้าอยากให้คลีนๆ */}
-                    <TaskCard task={task} onClick={() => handleCardClick(task)} />
+                    <TaskCard task={task} />
                   </div>
                 )}
               </Draggable>
@@ -112,20 +85,26 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
         )}
       </Droppable>
 
-      <button onClick={() => setIsModalOpen(true)} style={styles.addTaskBtn}>+ Add Task</button>
+      <button onClick={() => setIsModalOpen(true)} style={styles.addTaskBtn}>
+        <span style={styles.addTaskIcon}>+</span> Add Task
+      </button>
     </div>
   );
 }
 
 const styles = {
-  column: { minWidth: '280px', width: '280px', backgroundColor: '#231a17', borderRadius: '10px', padding: '10px', marginRight: '15px', display: 'flex', flexDirection: 'column', maxHeight: '100%', position: 'relative' },
-  headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', cursor: 'grab' },
-  header: { margin: 0, paddingLeft: '5px', fontSize: '16px', fontWeight: 'bold', color: '#cccccc' },
-  deleteColBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' },
-  taskList: { flexGrow: 1, overflowY: 'auto', marginBottom: '10px', paddingRight: '5px' },
-  addTaskBtn: { backgroundColor: 'transparent', border: 'none', color: '#5e6c84', padding: '8px', textAlign: 'left', cursor: 'pointer', borderRadius: '4px', fontSize: '14px', marginTop: 'auto', width: '100%' },
-  cardWrapper: {
-    marginBottom: '10px',
-    userSelect: 'none'
-  }
+  column: { width: '288px', minWidth: '288px', backgroundColor: '#231a17', borderRadius: '10px', border: '1px solid rgba(190,155,121,0.12)', display: 'flex', flexDirection: 'column', maxHeight: 'calc(100vh - 180px)', transition: 'border-color 0.2s', overflow: 'hidden' },
+  columnHovered: { border: '1px solid rgba(190,155,121,0.28)' },
+  headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px 12px', borderBottom: '1px solid rgba(190,155,121,0.1)', cursor: 'grab', backgroundColor: '#2a2018' },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: '8px' },
+  headerDot: { width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#be9b79', opacity: 0.7 },
+  header: { margin: 0, fontSize: '14px', fontWeight: '700', color: '#F6E2B3', fontFamily: 'Georgia, serif', letterSpacing: '0.3px' },
+  taskCount: { fontSize: '11px', color: '#be9b79', backgroundColor: 'rgba(190,155,121,0.15)', padding: '2px 7px', borderRadius: '10px', fontWeight: '600' },
+  deleteColBtn: { background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(190,155,121,0.3)', fontSize: '12px', padding: '4px', lineHeight: 1 },
+  taskList: { flexGrow: 1, overflowY: 'auto', padding: '12px 10px', transition: 'background-color 0.15s' },
+  taskListOver: { backgroundColor: 'rgba(190,155,121,0.05)' },
+  cardWrapper: { marginBottom: '8px', userSelect: 'none', borderRadius: '8px' },
+  cardDragging: { opacity: 0.85, boxShadow: '0 16px 40px rgba(0,0,0,0.5)' },
+  addTaskBtn: { margin: '8px 10px 10px', padding: '8px', background: 'none', border: '1px dashed rgba(190,155,121,0.2)', color: 'rgba(190,155,121,0.5)', cursor: 'pointer', borderRadius: '6px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s', fontFamily: 'Georgia, serif' },
+  addTaskIcon: { fontSize: '16px', fontWeight: '300' },
 };

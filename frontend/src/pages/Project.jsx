@@ -21,7 +21,10 @@ export default function Project() {
   const [inviteMsg, setInviteMsg] = useState('');
   const [projectData, setProjectData] = useState(null);
   const token = localStorage.getItem('token');
+  const [allTasks, setAllTasks] = useState({});
+
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 
   const fetchProjectDetails = async () => {
     try {
@@ -35,9 +38,25 @@ export default function Project() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/categories/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get(`${API_BASE_URL}/api/categories/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setCategories(res.data);
+      await fetchAllTasks(res.data);
     } catch (err) { console.error(err); }
+  };
+
+  const fetchAllTasks = async (cats) => {
+    const results = {};
+    await Promise.all((cats || categories).map(async (cat) => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/tasks/${cat._id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        results[cat._id] = res.data;
+      } catch { results[cat._id] = []; }
+    }));
+    setAllTasks(results);
   };
 
   const fetchLogs = async () => {
@@ -88,34 +107,43 @@ export default function Project() {
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
     if (type === 'COLUMN') {
-      // Optimistically reorder columns locally
       const reordered = Array.from(categories);
       const [moved] = reordered.splice(source.index, 1);
       reordered.splice(destination.index, 0, moved);
       setCategories(reordered);
-
       try {
-        await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`,
-          { categoryId: destination.droppableId, newOrder: destination.index },
+        await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`,
+          { newOrder: destination.index },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        fetchLogs();
-      } catch {
-        alert('Failed to move task');
-      }
+      } catch { alert('Failed to move column'); fetchCategories(); }
       return;
     }
 
-    // For tasks — just fire the API, let CategoryColumn handle its own state
+    // Optimistic task move
+    const sourceTasks = Array.from(allTasks[source.droppableId] || []);
+    const destTasks = source.droppableId === destination.droppableId
+      ? sourceTasks
+      : Array.from(allTasks[destination.droppableId] || []);
+
+    const [movedTask] = sourceTasks.splice(source.index, 1);
+    destTasks.splice(destination.index, 0, movedTask);
+
+    setAllTasks(prev => ({
+      ...prev,
+      [source.droppableId]: sourceTasks,
+      [destination.droppableId]: destTasks,
+    }));
+
     try {
       await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`,
         { categoryId: destination.droppableId, newOrder: destination.index },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchLogs();
-      setRefreshKey(p => p + 1);
     } catch {
       alert('Failed to move task');
+      fetchCategories(); // revert on error
     }
   };
 
@@ -186,8 +214,10 @@ export default function Project() {
                         style={{ ...styles.columnWrapper, ...provided.draggableProps.style }}>
                         <CategoryColumn
                           category={category}
+                          tasks={allTasks[category._id] || []}
                           onDeleteCategory={handleDeleteCategory}
                           dragHandleProps={provided.dragHandleProps}
+                          onTaskChange={fetchCategories}
                         />
                       </div>
                     )}
