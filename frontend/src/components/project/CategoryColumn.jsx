@@ -122,7 +122,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
 const styles = {
   column: { minWidth: '280px', width: '280px', backgroundColor: '#231a17', borderRadius: '10px', padding: '10px', marginRight: '15px', display: 'flex', flexDirection: 'column', maxHeight: '100%', position: 'relative' },
   headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', cursor: 'grab' },
-  header: { margin: 0, paddingLeft: '5px', fontSize: '16px', fontWeight: 'bold', color: '#172b4d' },
+  header: { margin: 0, paddingLeft: '5px', fontSize: '16px', fontWeight: 'bold', color: '#cccccc' },
   deleteColBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' },
   taskList: { flexGrow: 1, overflowY: 'auto', marginBottom: '10px', paddingRight: '5px' },
   addTaskBtn: { backgroundColor: 'transparent', border: 'none', color: '#5e6c84', padding: '8px', textAlign: 'left', cursor: 'pointer', borderRadius: '4px', fontSize: '14px', marginTop: 'auto', width: '100%' },
