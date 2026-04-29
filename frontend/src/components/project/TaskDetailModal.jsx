@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const priorityColors = {
+  High: { bg: 'rgba(224,112,112,0.12)', text: '#e07070' },
+  Medium: { bg: 'rgba(212,168,83,0.12)', text: '#d4a853' },
+  Low: { bg: 'rgba(106,170,122,0.12)', text: '#6aaa7a' },
+};
+
 export default function TaskDetailModal({ task, isOpen, onClose, onUpdate, onDelete }) {
   if (!isOpen || !task) return null;
 
