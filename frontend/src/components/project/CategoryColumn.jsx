@@ -6,7 +6,7 @@ import Modal from '../common/Modal';
 import TaskDetailModal from './TaskDetailModal';
 
 // 1. รับ onDeleteCategory เข้ามาด้วย (ไม่งั้นกดลบไม่ได้)
-export default function CategoryColumn({ category, onDeleteCategory, dragHandleProps, refreshKey }) {
+export default function CategoryColumn({ category, onDeleteCategory, dragHandleProps }) {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTaskContent, setNewTaskContent] = useState('');
@@ -58,13 +58,6 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
   };
 
   useEffect(() => { fetchTasks(); }, [category._id]);
-
-  useEffect(() => {
-    if (refreshKey > 0) {
-      const t = setTimeout(() => fetchTasks(), 500);
-      return () => clearTimeout(t);
-    }
-  }, [refreshKey]);
 
   return (
     <div style={styles.column}>

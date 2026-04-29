@@ -95,13 +95,13 @@ export default function Project() {
       setCategories(reordered);
 
       try {
-        await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`,
-          { newOrder: destination.index },
+        await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`,
+          { categoryId: destination.droppableId, newOrder: destination.index },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        fetchLogs();
       } catch {
-        alert('Failed to move column');
-        setRefreshKey(p => p + 1); // only re-fetch on error
+        alert('Failed to move task');
       }
       return;
     }
@@ -188,7 +188,6 @@ export default function Project() {
                           category={category}
                           onDeleteCategory={handleDeleteCategory}
                           dragHandleProps={provided.dragHandleProps}
-                          refreshKey={refreshKey}
                         />
                       </div>
                     )}
