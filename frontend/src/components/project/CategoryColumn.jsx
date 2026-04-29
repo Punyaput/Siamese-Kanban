@@ -120,7 +120,7 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
 }
 
 const styles = {
-  column: { minWidth: '280px', width: '280px', backgroundColor: '#ebecf0', borderRadius: '10px', padding: '10px', marginRight: '15px', display: 'flex', flexDirection: 'column', maxHeight: '100%', position: 'relative' },
+  column: { minWidth: '280px', width: '280px', backgroundColor: '#231a17', borderRadius: '10px', padding: '10px', marginRight: '15px', display: 'flex', flexDirection: 'column', maxHeight: '100%', position: 'relative' },
   headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', cursor: 'grab' },
   header: { margin: 0, paddingLeft: '5px', fontSize: '16px', fontWeight: 'bold', color: '#172b4d' },
   deleteColBtn: { background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px' },
