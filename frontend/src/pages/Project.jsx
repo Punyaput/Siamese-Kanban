@@ -88,17 +88,35 @@ export default function Project() {
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
     if (type === 'COLUMN') {
+      // Optimistically reorder columns locally
+      const reordered = Array.from(categories);
+      const [moved] = reordered.splice(source.index, 1);
+      reordered.splice(destination.index, 0, moved);
+      setCategories(reordered);
+
       try {
-        await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`, { newOrder: destination.index }, { headers: { Authorization: `Bearer ${token}` } });
-        setTimeout(() => setRefreshKey(p => p + 1), 300);
-      } catch { alert('Failed to move column'); }
+        await axios.put(`${API_BASE_URL}/api/categories/move/${draggableId}`,
+          { newOrder: destination.index },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } catch {
+        alert('Failed to move column');
+        setRefreshKey(p => p + 1); // only re-fetch on error
+      }
       return;
     }
+
+    // For tasks — just fire the API, let CategoryColumn handle its own state
     try {
-      await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`, { categoryId: destination.droppableId, newOrder: destination.index }, { headers: { Authorization: `Bearer ${token}` } });
-      setTimeout(() => setRefreshKey(p => p + 1), 300);
+      await axios.put(`${API_BASE_URL}/api/tasks/move/${draggableId}`,
+        { categoryId: destination.droppableId, newOrder: destination.index },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       fetchLogs();
-    } catch { alert('Failed to move task'); }
+      setRefreshKey(p => p + 1);
+    } catch {
+      alert('Failed to move task');
+    }
   };
 
   return (

@@ -57,9 +57,11 @@ export default function CategoryColumn({ category, onDeleteCategory, dragHandleP
     setIsDetailOpen(true);
   };
 
+  useEffect(() => { fetchTasks(); }, [category._id]);
+
   useEffect(() => {
-    fetchTasks();
-  }, [category._id, refreshKey]);
+    if (refreshKey > 0) fetchTasks();
+  }, [refreshKey]);
 
   return (
     <div style={styles.column}>
